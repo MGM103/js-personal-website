@@ -3,7 +3,6 @@
   display: grid;
   gap: 2rem;
   grid-template-columns: clamp(180px, 25vw, 280px) 1fr;
-  margin-top: 2rem;
 
   #bio {
     display: flex;
