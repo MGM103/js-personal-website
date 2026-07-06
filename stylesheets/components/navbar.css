@@ -1,0 +1,26 @@
+header {
+  background: linear-gradient(
+    180deg,
+    var(--color-primary),
+    oklch(from var(--color-primary) l c h / 0)
+  );
+  display: flex;
+  justify-content: space-between;
+  height: var(--header-height);
+  left: 0;
+  padding-block: 0.75rem;
+  padding-inline: var(--page-padding);
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  .logo {
+    font-size: 2rem;
+  }
+
+  .external-links {
+    display: flex;
+    gap: 0.5rem;
+    width: fit-content;
+  }
+}
