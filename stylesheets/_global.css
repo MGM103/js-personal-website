@@ -10,7 +10,7 @@
   /* Colour variables */
   --color-primary: oklch(98.66% 0.0021 17.19);
   --color-secondary: oklch(6.92% 0.008 284.11);
-  --color-tertiary: oklch(22.19% 0.0042 264.48);
+  --color-tertiary: oklch(60% 0.05 95);
 
   /* Layout variables */
   --header-height: 64px;

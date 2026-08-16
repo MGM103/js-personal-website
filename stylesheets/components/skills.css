@@ -2,6 +2,7 @@
   column-gap: 4rem;
   display: grid;
   grid-template-columns: 1fr 3fr;
+  position: relative;
 
   .side-panel {
     display: flex;
@@ -13,22 +14,76 @@
       border: none;
       border-bottom: 1px solid var(--color-secondary);
       color: var(--color-secondary);
+      position: relative;
       text-align: start;
+
+      &:hover {
+        font-weight: bold;
+      }
+
+      &::after {
+        background-color: var(--color-secondary);
+        bottom: -2px;
+        content: "";
+        height: 1px;
+        left: 0;
+        position: absolute;
+        width: 100%;
+
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 200ms ease;
+      }
+
+      &:hover::after,
+      &:active::after {
+        transform: scaleX(1);
+      }
     }
   }
 
-  .hidden-skill-grid {
-    display: none;
-  }
-
-  .active-skill-grid {
+  .skills-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(auto, 128px));
     row-gap: 2rem;
+  }
+
+  .ghost-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    font: inherit;
+    line-height: 0;
+    cursor: pointer;
 
     svg {
       max-height: 64px;
       max-width: 64px;
     }
+
+    &:hover svg,
+    &:focus-visible svg {
+      filter: drop-shadow(
+        0px 0px 8px
+          color-mix(
+            in oklch,
+            var(--color-secondary),
+            var(--color-tertiary) 80%
+          )
+      );
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  #skill-modal {
+    background-color: var(--color-primary);
+    height: 100%;
+    inset: 0;
+    width: 100%;
   }
 }
