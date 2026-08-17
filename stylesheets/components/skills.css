@@ -10,10 +10,11 @@
     gap: 0.75rem;
 
     button {
+      --accent: var(--color-secondary);
       background-color: transparent;
       border: none;
-      border-bottom: 1px solid var(--color-secondary);
-      color: var(--color-secondary);
+      border-bottom: 1px solid var(--accent);
+      color: var(--accent);
       position: relative;
       text-align: start;
 
@@ -21,57 +22,48 @@
         font-weight: bold;
       }
 
+      &:focus-visible {
+        border-bottom-color: transparent;
+        border-radius: 0;
+        font-weight: bold;
+        outline: 2px solid var(--accent);
+      }
+
       &::after {
-        background-color: var(--color-secondary);
+        background-color: var(--accent);
         bottom: -2px;
         content: "";
         height: 1px;
         left: 0;
         position: absolute;
-        width: 100%;
-
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 200ms ease;
+        width: 100%;
       }
 
-      &:hover:not(:focus-visible):after,
+      &:hover:not(:focus-visible)::after,
       &:active:not(:focus-visible)::after {
         transform: scaleX(1);
       }
 
-      &:focus-visible {
-        border-bottom: 1px solid transparent;
-        border-radius: 0;
-        font-weight: bold;
-        outline: 2px solid var(--color-secondary);
-      }
-
       &.active {
-        border-bottom: 1px solid
-          color-mix(in oklch, var(--color-secondary), var(--color-tertiary) 75%);
-        color: color-mix(
-          in oklch,
-          var(--color-secondary),
-          var(--color-tertiary) 75%
-        );
+        --accent: var(--color-tertiary);
+        --active-blend: color-mix(in oklch, var(--color-secondary), var(--color-tertiary) 75%);
+        border-bottom-color: var(--active-blend);
+        box-shadow: 0 1px 0 0 var(--accent);
+        color: var(--active-blend);
         font-weight: bold;
-      }
 
-      &.active:hover:not(:focus-visible) {
-        color: var(--color-tertiary);
-        border-bottom: 1px solid var(--color-tertiary);
-      }
+        &:hover:not(:focus-visible) {
+          border-bottom-color: var(--accent);
+          color: var(--accent);
+        }
 
-      &.active:focus-visible {
-        border-bottom: 1px solid transparent;
-        color: var(--color-tertiary);
-        outline: 2px solid var(--color-tertiary);
-      }
-
-      &.active::after {
-        background-color: var(--color-tertiary);
-        transform: scaleX(1);
+        &:focus-visible {
+          color: var(--accent);
+          outline-color: var(--accent);
+        }
       }
     }
   }
