@@ -35,8 +35,42 @@
         transition: transform 200ms ease;
       }
 
-      &:hover::after,
-      &:active::after {
+      &:hover:not(:focus-visible):after,
+      &:active:not(:focus-visible)::after {
+        transform: scaleX(1);
+      }
+
+      &:focus-visible {
+        border-bottom: 1px solid transparent;
+        border-radius: 0;
+        font-weight: bold;
+        outline: 2px solid var(--color-secondary);
+      }
+
+      &.active {
+        border-bottom: 1px solid
+          color-mix(in oklch, var(--color-secondary), var(--color-tertiary) 75%);
+        color: color-mix(
+          in oklch,
+          var(--color-secondary),
+          var(--color-tertiary) 75%
+        );
+        font-weight: bold;
+      }
+
+      &.active:hover:not(:focus-visible) {
+        color: var(--color-tertiary);
+        border-bottom: 1px solid var(--color-tertiary);
+      }
+
+      &.active:focus-visible {
+        border-bottom: 1px solid transparent;
+        color: var(--color-tertiary);
+        outline: 2px solid var(--color-tertiary);
+      }
+
+      &.active::after {
+        background-color: var(--color-tertiary);
         transform: scaleX(1);
       }
     }
@@ -67,11 +101,7 @@
     &:focus-visible svg {
       filter: drop-shadow(
         0px 0px 8px
-          color-mix(
-            in oklch,
-            var(--color-secondary),
-            var(--color-tertiary) 80%
-          )
+          color-mix(in oklch, var(--color-secondary), var(--color-tertiary) 80%)
       );
     }
 
