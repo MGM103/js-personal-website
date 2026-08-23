@@ -170,11 +170,31 @@
 
           <div class="skills-container"></div>
           <dialog id="skill-modal">
-            <div id="skill-icon"></div>
-            <div id="skill-description">
-              <h3 id="skill-title"></h3>
-              <div id="skill-content"></div>
+            <div id="skill-modal-container">
+              <div id="skill-icon"></div>
+              <div id="skill-description">
+                <h3 id="skill-title"></h3>
+                <div id="skill-content"></div>
+              </div>
             </div>
+            <button
+              id="skill-close"
+              class="ghost-btn"
+              command="close"
+              commandfor="skill-modal"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="36px"
+                viewBox="0 -960 960 960"
+                width="36px"
+                fill="currentColor"
+              >
+                <path
+                  d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+                />
+              </svg>
+            </button>
           </dialog>
         </div>
       </div>

@@ -14,7 +14,7 @@ export const skillsContent = {
         I have built and maintained applications ranging from personal projects to enterprise systems for multinational insurance clients, and I am comfortable contributing to React projects of all sizes. My experience extends across the wider React ecosystem, including TanStack Query, Zustand, Redux, Zod, and Axios. I have designed scalable component architectures, managed complex client-side state, integrated frontend applications with backend APIs, and place a strong emphasis on performance by analysing render behaviour, eliminating unnecessary re-renders, and applying optimisation techniques where they provide measurable benefit.
       </p>
       <p>
-        Alongside commercial development, I have also contributed to technical enablement by creating a <a href="https://github.com/MGM103/My_First_MFE" target="_blank">React microfrontend tutorial</a> that was used to introduce the architecture to developers on a national insurance engagement.
+        Alongside commercial development, I have also contributed to technical enablement by creating a <a class="external-link" href="https://github.com/MGM103/My_First_MFE" target="_blank">React microfrontend tutorial</a> that was used to introduce the architecture to developers on a national insurance engagement.
       </p>
       `,
     },
@@ -333,6 +333,7 @@ function getIcon(skillId) {
     >
       <use href="${ICON_SPRITE}#${skillId}"></use>
     </svg>
+    <div id="icon-reflection"></div>
   `;
 }
 
@@ -364,7 +365,7 @@ function renderSkillModal(skill) {
 
   skillIconEl.innerHTML = getIcon(skill.id);
 
-  skillModal.show();
+  skillModal.showModal();
 }
 
 /**********************************************************************

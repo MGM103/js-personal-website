@@ -91,21 +91,3 @@ summary {
     scroll-behavior: initial;
   }
 }
-
-dialog {
-  background: transparent;
-  border: 0;
-  color: inherit;
-  font: inherit;
-  margin: 0;
-  padding: 0;
-
-  &:where(:focus-visible):focus,
-  &:where(:focus-visible):active {
-    outline: 0;
-  }
-
-  &::backdrop {
-    background: transparent;
-  }
-}
