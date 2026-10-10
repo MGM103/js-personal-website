@@ -33,3 +33,93 @@
     width: 28px;
   }
 }
+
+.side-panel-btn {
+  --accent: var(--color-secondary);
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
+  position: relative;
+  text-align: start;
+
+  &:hover {
+    font-weight: bold;
+  }
+
+  &:focus-visible {
+    border-bottom-color: transparent;
+    border-radius: 0;
+    font-weight: bold;
+    outline: 2px solid var(--accent);
+  }
+
+  &::after {
+    background-color: var(--accent);
+    bottom: -2px;
+    content: "";
+    height: 1px;
+    left: 0;
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms ease;
+    width: 100%;
+  }
+
+  &:hover:not(:focus-visible)::after,
+  &:active:not(:focus-visible)::after {
+    transform: scaleX(1);
+  }
+
+  &.active {
+    --accent: var(--color-tertiary);
+    --active-blend: color-mix(
+      in oklch,
+      var(--color-secondary),
+      var(--color-tertiary) 75%
+    );
+    border-bottom-color: var(--active-blend);
+    box-shadow: 0 1px 0 0 var(--accent);
+    color: var(--active-blend);
+    font-weight: bold;
+
+    &:hover:not(:focus-visible) {
+      border-bottom-color: var(--accent);
+      color: var(--accent);
+    }
+
+    &:focus-visible {
+      color: var(--accent);
+      outline-color: var(--accent);
+    }
+  }
+}
+
+.ghost-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  line-height: 0;
+  cursor: pointer;
+
+  svg {
+    max-height: 64px;
+    max-width: 64px;
+  }
+
+  &:hover svg,
+  &:focus-visible svg {
+    filter: drop-shadow(
+      0px 0px 8px
+        color-mix(in oklch, var(--color-secondary), var(--color-tertiary) 80%)
+    );
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
