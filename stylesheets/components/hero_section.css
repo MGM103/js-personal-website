@@ -25,6 +25,11 @@
 		line-height: 1.5;
 		margin-bottom: -1rem;
 		text-transform: capitalize;
+
+		@media (max-width: 768px) {
+			/* Matches the h1's leading so both headings read as one block. */
+			line-height: 1.2;
+		}
 	}
 
 	#preview {

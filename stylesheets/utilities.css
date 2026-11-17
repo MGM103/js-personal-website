@@ -11,10 +11,3 @@
 		font-size: 32px;
 	}
 }
-
-a.external-link::after {
-	content: "↗";
-	font-size: 0.7em;
-	margin-left: 0.15em;
-	vertical-align: super;
-}

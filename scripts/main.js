@@ -1,5 +1,9 @@
-import { initaliseSkills } from "./skills.js";
+import {
+	initialiseFooter,
+	initialiseNavbar,
+	initaliseSkills,
+} from "./components/index.js";
 
+initialiseNavbar();
 initaliseSkills();
-const footer = document.querySelector("footer");
-footer.textContent = `© ${new Date().getFullYear()} Marcus Marinelli`;
+initialiseFooter();

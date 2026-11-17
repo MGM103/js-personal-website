@@ -16,16 +16,47 @@
 		flex-direction: column;
 		gap: 0.75rem;
 
+		.mobile-bubble {
+			display: none;
+		}
+
 		@media (max-width: 768px) {
 			background-color: color-mix(
 				in oklch,
 				var(--color-primary),
-				var(--color-tertiary) 25%
+				var(--color-secondary) 25%
 			);
+			border: 1px solid var(--color-secondary);
 			flex-direction: row;
-			padding: 0.5rem;
+			gap: 0.25rem;
+			justify-content: initial;
+			padding: 0.25rem;
 
-			text-decoration: none;
+			/* Containing block + stacking context for the bubble. */
+			isolation: isolate;
+			position: relative;
+
+			.mobile-bubble {
+				background-color: color-mix(
+					in oklch,
+					var(--color-tertiary),
+					transparent 65%
+				);
+				display: block;
+				inset: 0 auto auto 0;
+				pointer-events: none;
+				position: absolute;
+				transition:
+					transform 250ms ease,
+					width 250ms ease,
+					height 250ms ease;
+				z-index: -1;
+
+				/* Avoids animating the entry glide on first placement. */
+				&.mobile-bubble--instant {
+					transition: none;
+				}
+			}
 		}
 	}
 
@@ -88,5 +119,32 @@
 		top: 2%;
 		right: 1%;
 		z-index: 1;
+
+		.close-label {
+			display: none;
+		}
+
+		/* Mobile: the icon becomes a labelled button at the bottom of the dialog. */
+		@media (max-width: 768px) {
+			border: 1px solid var(--color-tertiary);
+			line-height: normal;
+			margin-top: 1.5rem;
+			padding-block: 0.5rem;
+			position: static;
+			width: 100%;
+
+			.close-icon {
+				display: none;
+			}
+
+			.close-label {
+				display: inline;
+			}
+
+			/* The glow below only targets the icon, which is hidden here. */
+			&:focus-visible {
+				outline: 2px solid var(--color-tertiary);
+			}
+		}
 	}
 }

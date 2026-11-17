@@ -1,18 +1,82 @@
 header {
-	background: linear-gradient(
-		180deg,
-		var(--color-primary),
-		oklch(from var(--color-primary) l c h / 0)
-	);
+	background-color: var(--color-primary);
 	display: flex;
 	justify-content: space-between;
-	height: var(--header-height);
+	height: calc(var(--header-height) - 0.5rem);
 	left: 0;
-	padding-block: 0.75rem;
+	padding-top: 0.75rem;
+	padding-bottom: 0.25rem;
 	padding-inline: var(--page-padding);
 	position: fixed;
 	top: 0;
 	width: 100%;
+	z-index: 1;
+
+	&::before {
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		bottom: calc(-1 * var(--navbar-fade-height));
+		content: "";
+		left: 0;
+		-webkit-mask-image: linear-gradient(
+			180deg,
+			black 0%,
+			black 50%,
+			rgb(0 0 0 / 0.85) 65%,
+			rgb(0 0 0 / 0.5) 80%,
+			rgb(0 0 0 / 0.15) 92%,
+			transparent 100%
+		);
+		mask-image: linear-gradient(
+			180deg,
+			black 0%,
+			black 50%,
+			rgb(0 0 0 / 0.85) 65%,
+			rgb(0 0 0 / 0.5) 80%,
+			rgb(0 0 0 / 0.15) 92%,
+			transparent 100%
+		);
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		transition: opacity 200ms ease;
+		width: 100%;
+		z-index: -1;
+	}
+
+	/*
+	 * Solid-to-transparent colour layer: also spans from top: 0 through the
+	 * fade region using eased stops so the solid navbar dissolves softly into
+	 * the blur with no straight line cutting across scrolling content.
+	 */
+	&::after {
+		background: linear-gradient(
+			180deg,
+			var(--color-primary) 0%,
+			var(--color-primary) 46%,
+			oklch(from var(--color-primary) l c h / 0.92) 56%,
+			oklch(from var(--color-primary) l c h / 0.72) 66%,
+			oklch(from var(--color-primary) l c h / 0.42) 78%,
+			oklch(from var(--color-primary) l c h / 0.14) 90%,
+			oklch(from var(--color-primary) l c h / 0) 100%
+		);
+		bottom: calc(-1 * var(--navbar-fade-height));
+		content: "";
+		left: 0;
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		transition: opacity 200ms ease;
+		width: 100%;
+		z-index: -1;
+	}
+
+	&.is-scrolled::before,
+	&.is-scrolled::after {
+		opacity: 1;
+	}
 
 	.logo {
 		font-size: 2rem;

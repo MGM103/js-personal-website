@@ -14,7 +14,18 @@
 
 	/* Layout variables */
 	--header-height: 64px;
+	--navbar-fade-height: 2.5rem;
 	--page-padding: 2rem;
+
+	@media (max-width: 480px) {
+		/* Phones: reclaim gutter so the menu row can use larger labels. */
+		--page-padding: 1rem;
+	}
+
+	/* Native UI (scrollbars, form controls) follows the same light/dark theme. */
+	color-scheme: light dark;
+	scrollbar-color: var(--color-tertiary) var(--color-primary);
+	scrollbar-width: thin;
 
 	@media (prefers-color-scheme: dark) {
 		/* Colour variables */

@@ -37,4 +37,22 @@ main {
 a {
 	color: var(--color-tertiary);
 	text-decoration: none;
+	transition: color 150ms ease;
+
+	/* Mixing towards --color-secondary lightens links in dark mode and
+	   darkens them in light mode, so hover tracks the active theme. */
+	&:hover {
+		color: color-mix(
+			in oklch,
+			var(--color-tertiary),
+			var(--color-secondary) 35%
+		);
+	}
+}
+
+a[target="_blank"]:not(.outline-btn, .ghost-btn)::after {
+	content: "↗";
+	font-size: 0.7em;
+	margin-left: 0.15em;
+	vertical-align: super;
 }

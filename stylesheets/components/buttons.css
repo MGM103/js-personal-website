@@ -6,7 +6,7 @@
 	}
 }
 
-.nav-btn {
+.outline-btn {
 	align-items: center;
 	background-color: transparent;
 	border: 1px solid var(--color-tertiary);
@@ -34,7 +34,7 @@
 	}
 }
 
-.side-panel-btn {
+.menu-btn {
 	--accent: var(--color-secondary);
 	background-color: transparent;
 	border: none;
@@ -43,33 +43,38 @@
 	position: relative;
 	text-align: start;
 
-	&:hover {
-		font-weight: bold;
-	}
-
-	&:focus-visible {
-		border-bottom-color: transparent;
-		border-radius: 0;
-		font-weight: bold;
-		outline: 2px solid var(--accent);
-	}
-
 	&::after {
 		background-color: var(--accent);
 		bottom: -2px;
 		content: "";
 		height: 1px;
-		left: 0;
+		inset-inline: 0;
 		position: absolute;
 		transform: scaleX(0);
 		transform-origin: left;
 		transition: transform 200ms ease;
-		width: 100%;
 	}
 
-	&:hover:not(:focus-visible)::after,
+	&:focus-visible {
+		border-bottom-color: transparent;
+		font-weight: bold;
+		outline: 2px solid var(--accent);
+	}
+
 	&:active:not(:focus-visible)::after {
 		transform: scaleX(1);
+	}
+
+	/* Hover styling is desktop pointer-only: touch browsers keep :hover after
+	   a tap, which would otherwise override the active tab's styling. */
+	@media (hover: hover) and (min-width: 769px) {
+		&:hover {
+			font-weight: bold;
+		}
+
+		&:hover:not(:focus-visible)::after {
+			transform: scaleX(1);
+		}
 	}
 
 	&.active {
@@ -84,14 +89,40 @@
 		color: var(--active-blend);
 		font-weight: bold;
 
-		&:hover:not(:focus-visible) {
-			border-bottom-color: var(--accent);
-			color: var(--accent);
-		}
-
 		&:focus-visible {
+			border-bottom-color: transparent;
+			box-shadow: none;
 			color: var(--accent);
 			outline-color: var(--accent);
+		}
+
+		@media (hover: hover) and (min-width: 769px) {
+			&:hover:not(:focus-visible) {
+				border-bottom-color: var(--accent);
+				color: var(--accent);
+			}
+		}
+	}
+
+	@media (max-width: 768px) {
+		border-bottom: none;
+		color: color-mix(in oklch, var(--color-secondary), transparent 30%);
+		flex: 1 1 0;
+		font-size: clamp(0.8rem, 3.8vw, 1rem);
+		font-weight: bold;
+		min-width: 0;
+		padding: 0.35rem 0.25rem;
+		text-align: center;
+		white-space: nowrap;
+
+		&::after {
+			display: none;
+		}
+
+		&.active,
+		&.active:focus-visible {
+			box-shadow: none;
+			color: var(--color-secondary);
 		}
 	}
 }

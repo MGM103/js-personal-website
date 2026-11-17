@@ -18,7 +18,7 @@
           href="https://github.com/MGM103"
           target="_blank"
           title="GitHub"
-          class="nav-btn"
+          class="outline-btn"
         >
           <svg
             width="800px"
@@ -41,7 +41,7 @@
           href="https://www.linkedin.com/in/marcus-marinelli-b1a10b1a0/"
           target="_blank"
           title="LinkedIn"
-          class="nav-btn"
+          class="outline-btn"
         >
           <svg
             width="800px"
@@ -79,7 +79,7 @@
           href="https://drive.google.com/file/d/1vYVl63QeDYEr6ttxXMOEYOM5W7uEQEvG/view?usp=sharing"
           target="_blank"
           title="Résumé"
-          class="nav-btn"
+          class="outline-btn"
         >
           <svg
             width="800px"
@@ -161,14 +161,15 @@
 
         <div id="skills">
           <div id="skills-side-panel" class="side-panel">
-            <button data-target="frontend" class="side-panel-btn active">
+            <button data-target="frontend" class="menu-btn active">
               Frontend
             </button>
-            <button data-target="backend" class="side-panel-btn">
+            <button data-target="backend" class="menu-btn">
               Backend
             </button>
-            <button data-target="devops" class="side-panel-btn">DevOps</button>
-            <button data-target="other" class="side-panel-btn">Other</button>
+            <button data-target="devops" class="menu-btn">DevOps</button>
+            <button data-target="other" class="menu-btn">Other</button>
+            <div class="mobile-bubble" aria-hidden="true"></div>
           </div>
 
           <div class="skills-container"></div>
@@ -185,18 +186,23 @@
               class="ghost-btn"
               command="close"
               commandfor="skill-modal"
+              aria-label="Close"
             >
               <svg
+                class="close-icon"
                 xmlns="http://www.w3.org/2000/svg"
                 height="36px"
                 viewBox="0 -960 960 960"
                 width="36px"
                 fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
               >
                 <path
                   d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
                 />
               </svg>
+              <span class="close-label">Close</span>
             </button>
           </dialog>
         </div>

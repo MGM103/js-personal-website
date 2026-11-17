@@ -9,6 +9,7 @@ import { skillsContent } from "./skills.data.js";
 // Menu
 let activeCategory = "frontend";
 const skillsSidePanel = document.getElementById("skills-side-panel");
+const mobileBubble = skillsSidePanel.querySelector(".mobile-bubble");
 
 // Icon grid
 const ICON_SPRITE = "/assets/icons.svg";
@@ -67,6 +68,49 @@ function renderSkillModal(skill) {
 	skillModal.showModal();
 }
 
+// Active-tab bubble (mobile only)
+let bubblePlaced = false;
+
+// The bubble is display: none above the mobile breakpoint, so the breakpoint
+// itself stays in CSS instead of being duplicated here.
+function bubbleIsVisible() {
+	return getComputedStyle(mobileBubble).display !== "none";
+}
+
+function updateBubble() {
+	const activeButton = skillsSidePanel.querySelector(".menu-btn.active");
+
+	if (!activeButton || !bubbleIsVisible()) {
+		mobileBubble.style.removeProperty("height");
+		mobileBubble.style.removeProperty("transform");
+		mobileBubble.style.removeProperty("width");
+		bubblePlaced = false;
+		return;
+	}
+
+	const panelBox = skillsSidePanel.getBoundingClientRect();
+	const buttonBox = activeButton.getBoundingClientRect();
+	const snap = !bubblePlaced;
+
+	if (snap) mobileBubble.classList.add("mobile-bubble--instant");
+
+	// The bubble is positioned against the panel's padding box, so the panel
+	// border has to be discounted from the viewport-based rects.
+	mobileBubble.style.width = `${buttonBox.width}px`;
+	mobileBubble.style.height = `${buttonBox.height}px`;
+	mobileBubble.style.transform = `translate(${
+		buttonBox.left - panelBox.left - skillsSidePanel.clientLeft
+	}px, ${buttonBox.top - panelBox.top - skillsSidePanel.clientTop}px)`;
+
+	if (snap) {
+		// Flush the snapped position before transitions are re-enabled.
+		void mobileBubble.offsetWidth;
+		mobileBubble.classList.remove("mobile-bubble--instant");
+	}
+
+	bubblePlaced = true;
+}
+
 /**********************************************************************
  * Event Handlers
  **********************************************************************/
@@ -83,6 +127,8 @@ function onCategoryClick(event) {
 	skillsSidePanel.querySelector(".active")?.classList.remove("active");
 
 	button.classList.add("active");
+
+	updateBubble();
 
 	renderSkillCategory(category);
 }
@@ -112,4 +158,10 @@ export function initaliseSkills() {
 	});
 
 	renderSkillCategory(activeCategory);
+
+	// Keep the bubble aligned through layout changes that don't involve a click
+	// (breakpoint switches, rotation) and late-loading webfonts.
+	new ResizeObserver(updateBubble).observe(skillsSidePanel);
+	document.fonts?.ready.then(updateBubble);
+	updateBubble();
 }
