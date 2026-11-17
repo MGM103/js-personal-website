@@ -1,28 +1,28 @@
 #about {
-  align-items: start;
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: clamp(180px, 25vw, 280px) 1fr;
+	align-items: start;
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: clamp(180px, 25vw, 280px) 1fr;
 
-  #bio {
-    display: flex;
-    flex-direction: column;
+	#bio {
+		display: flex;
+		flex-direction: column;
 
-    p {
-      margin-top: 0;
-    }
-  }
+		p {
+			margin-top: 0;
+		}
+	}
 
-  img {
-    height: auto;
-    width: 100%;
-    display: block;
-  }
+	img {
+		height: auto;
+		width: 100%;
+		display: block;
+	}
 
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-    img {
-      display: none;
-    }
-  }
+	@media (max-width: 1024px) {
+		grid-template-columns: 1fr;
+		img {
+			display: none;
+		}
+	}
 }

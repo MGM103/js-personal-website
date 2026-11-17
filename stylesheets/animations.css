@@ -1,28 +1,28 @@
 @keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 .fade-in {
-  animation: fade-in 4s ease;
+	animation: fade-in 4s ease;
 }
 
 @keyframes hovering {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-1.5rem);
-  }
-  100% {
-    transform: translateY(0rem);
-  }
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-1.5rem);
+	}
+	100% {
+		transform: translateY(0rem);
+	}
 }
 
 .hovering {
-  animation: hovering 5s ease-in-out;
+	animation: hovering 5s ease-in-out;
 }

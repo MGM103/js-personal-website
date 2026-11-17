@@ -24,7 +24,7 @@ const skillIconEl = document.getElementById("skill-icon");
  * Rendering
  **********************************************************************/
 function getIcon(skillId) {
-  return `
+	return `
     <svg
       class="skill-icon"
       aria-hidden="true"
@@ -37,34 +37,34 @@ function getIcon(skillId) {
 }
 
 function renderSkillButton(skill) {
-  const button = document.createElement("button");
+	const button = document.createElement("button");
 
-  button.type = "button";
-  button.className = "ghost-btn";
-  button.dataset.skill = skill.id;
-  button.title = skill.title;
-  button.setAttribute("aria-label", skill.title);
+	button.type = "button";
+	button.className = "ghost-btn";
+	button.dataset.skill = skill.id;
+	button.title = skill.title;
+	button.setAttribute("aria-label", skill.title);
 
-  button.innerHTML = getIcon(skill.id);
+	button.innerHTML = getIcon(skill.id);
 
-  return button;
+	return button;
 }
 
 function renderSkillCategory(category) {
-  skillsContainer.replaceChildren();
+	skillsContainer.replaceChildren();
 
-  for (const skill of skillsContent[category]) {
-    skillsContainer.append(renderSkillButton(skill));
-  }
+	for (const skill of skillsContent[category]) {
+		skillsContainer.append(renderSkillButton(skill));
+	}
 }
 
 function renderSkillModal(skill) {
-  skillModalTitleEl.textContent = skill.title;
-  skillModalContentEl.innerHTML = skill.description;
+	skillModalTitleEl.textContent = skill.title;
+	skillModalContentEl.innerHTML = skill.description;
 
-  skillIconEl.innerHTML = getIcon(skill.id);
+	skillIconEl.innerHTML = getIcon(skill.id);
 
-  skillModal.showModal();
+	skillModal.showModal();
 }
 
 /**********************************************************************
@@ -72,44 +72,44 @@ function renderSkillModal(skill) {
  **********************************************************************/
 
 function onCategoryClick(event) {
-  const button = event.target.closest("button");
-  if (!button) return;
+	const button = event.target.closest("button");
+	if (!button) return;
 
-  const category = button.dataset.target;
-  if (!category) return;
+	const category = button.dataset.target;
+	if (!category) return;
 
-  activeCategory = category;
+	activeCategory = category;
 
-  skillsSidePanel.querySelector(".active")?.classList.remove("active");
+	skillsSidePanel.querySelector(".active")?.classList.remove("active");
 
-  button.classList.add("active");
+	button.classList.add("active");
 
-  renderSkillCategory(category);
+	renderSkillCategory(category);
 }
 
 function onSkillClick(event) {
-  const button = event.target.closest("button");
-  if (!button) return;
+	const button = event.target.closest("button");
+	if (!button) return;
 
-  const skill = skillsContent[activeCategory].find(
-    (skill) => skill.id === button.dataset.skill,
-  );
+	const skill = skillsContent[activeCategory].find(
+		(skill) => skill.id === button.dataset.skill,
+	);
 
-  if (!skill) return;
+	if (!skill) return;
 
-  renderSkillModal(skill);
+	renderSkillModal(skill);
 }
 
 /**********************************************************************
  * Initialiser
  **********************************************************************/
 export function initaliseSkills() {
-  skillsSidePanel.addEventListener("click", onCategoryClick);
-  skillsContainer.addEventListener("click", onSkillClick);
+	skillsSidePanel.addEventListener("click", onCategoryClick);
+	skillsContainer.addEventListener("click", onSkillClick);
 
-  skillModal.addEventListener("click", (event) => {
-    if (event.target === skillModal) skillModal.close();
-  });
+	skillModal.addEventListener("click", (event) => {
+		if (event.target === skillModal) skillModal.close();
+	});
 
-  renderSkillCategory(activeCategory);
+	renderSkillCategory(activeCategory);
 }
