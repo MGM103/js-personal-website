@@ -9,12 +9,14 @@ const EXTERNAL_LINKS = [
 	{ label: "GitHub", href: "https://github.com/MGM103" },
 ];
 
-// The desktop navbar links to the page you are not on; the mobile menu does
-// the same, so the label and path swap depending on the current page.
-const PAGE_LINKS = {
-	home: { label: "CV", href: "pages/cv.html" },
-	cv: { label: "Home", href: "../index.html" },
-};
+// Paths are relative to the site root; each page passes the prefix that gets
+// from its own directory back to the root ("" for index.html, "../" for
+// pages/, "../../" for pages/blog/).
+const PAGE_LINKS = [
+	{ id: "home", label: "Home", href: "index.html" },
+	{ id: "cv", label: "CV", href: "pages/cv.html" },
+	{ id: "blog", label: "Blog", href: "pages/blog.html" },
+];
 
 /**********************************************************************
  * DOM Elements
@@ -40,7 +42,7 @@ function renderTrigger() {
 	return button;
 }
 
-function renderNavItem({ label, href, external }) {
+function renderNavItem({ label, href, external, current }) {
 	const item = document.createElement("li");
 	const link = document.createElement("a");
 
@@ -52,17 +54,17 @@ function renderNavItem({ label, href, external }) {
 		link.rel = "noopener";
 	}
 
+	if (current) link.setAttribute("aria-current", "page");
+
 	item.append(link);
 	return item;
 }
 
-function renderDialog(currentPage) {
+function renderDialog(currentPage, base) {
 	const dialog = document.createElement("dialog");
 	const nav = document.createElement("nav");
 	const list = document.createElement("ul");
 	const closeButton = document.createElement("button");
-
-	const pageLink = PAGE_LINKS[currentPage] ?? PAGE_LINKS.home;
 
 	dialog.id = "mobile-nav-modal";
 	dialog.className = "mobile-nav-modal";
@@ -70,7 +72,14 @@ function renderDialog(currentPage) {
 
 	list.className = "mobile-nav-list";
 	list.append(
-		renderNavItem({ ...pageLink, external: false }),
+		...PAGE_LINKS.map((link) =>
+			renderNavItem({
+				...link,
+				href: `${base}${link.href}`,
+				external: false,
+				current: link.id === currentPage,
+			}),
+		),
 		...EXTERNAL_LINKS.map((link) =>
 			renderNavItem({ ...link, external: true }),
 		),
@@ -132,9 +141,9 @@ function onPopState() {
 /**********************************************************************
  * Initialiser
  **********************************************************************/
-export function initialiseMobileNav(currentPage) {
+export function initialiseMobileNav(currentPage, { base = "" } = {}) {
 	mobileNavTrigger = renderTrigger();
-	mobileNavDialog = renderDialog(currentPage);
+	mobileNavDialog = renderDialog(currentPage, base);
 
 	// The trigger replaces the navbar, so it belongs before the page content
 	// in the reading and tab order as well as in the bottom-right corner.

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="An ERC-1155 primer: multi-token contracts, semi-fungibility, batch operations and supply extensions."
+    />
+    <link rel="stylesheet" href="../../stylesheets/_global.css" />
+    <link rel="stylesheet" href="../../stylesheets/pages/article.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="../../assets/images/favicon.svg"
+    />
+    <script src="../../scripts/vendor/prism-articles.js" defer></script>
+    <script type="module" src="../../scripts/article.js"></script>
+    <title>ERC-1155 Primer — Marcus Marinelli</title>
+  </head>
+  <body>
+    <!-- Component: navbar -->
+    <header>
+      <a
+        href="../../index.html"
+        class="logo"
+        title="Marcus Marinelli — home"
+        aria-label="Marcus Marinelli — home"
+        >M<sup>2</sup></a
+      >
+
+      <nav class="nav-links" aria-label="Pages">
+        <a href="../cv.html">CV</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+      </nav>
+
+      <div class="external-links">
+        <a
+          href="https://github.com/MGM103"
+          target="_blank"
+          rel="noopener"
+          title="GitHub"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 192 192"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="12"
+              d="M120.755 170c.03-4.669.059-20.874.059-27.29 0-9.272-3.167-15.339-6.719-18.41 22.051-2.464 45.201-10.863 45.201-49.067 0-10.855-3.824-19.735-10.175-26.683 1.017-2.516 4.413-12.63-.987-26.32 0 0-8.296-2.672-27.202 10.204-7.912-2.213-16.371-3.308-24.784-3.352-8.414.044-16.872 1.14-24.785 3.352C52.457 19.558 44.162 22.23 44.162 22.23c-5.4 13.69-2.004 23.804-.987 26.32C36.824 55.498 33 64.378 33 75.233c0 38.204 23.149 46.603 45.2 49.067-3.551 3.071-6.719 9.138-6.719 18.41 0 6.416.03 22.621.059 27.29M27 130c9.939.703 15.67 9.735 15.67 9.735 8.834 15.199 23.178 10.803 28.815 8.265"
+            ></path>
+          </svg>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/marcus-marinelli-b1a10b1a0/"
+          target="_blank"
+          rel="noopener"
+          title="LinkedIn"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 20 20"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-180.000000, -7479.000000)"
+                fill="#000000"
+              >
+                <g id="icons" transform="translate(56.000000, 160.000000)">
+                  <path
+                    d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
+                    id="linkedin-[#161]"
+                    fill="currentColor"
+                  ></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="article">
+        <article>
+          <header class="article-header">
+            <a class="article-back" href="../blog.html">&larr; All articles</a>
+
+            <p class="article-kicker">
+              <time datetime="2024-11-14">14 Nov 2024</time>
+              <span>3 min read</span>
+            </p>
+
+            <h1>ERC-1155 Primer</h1>
+            <p class="article-lede">
+              One contract for fungible, semi-fungible and non-fungible tokens,
+              with batch operations, safe transfers and supply extensions.
+            </p>
+          </header>
+
+          <div class="article-body">
+            <h2>Overview</h2>
+
+            <p>
+              The ERC-1155 standard specifies an interface that supports multiple
+              tokens governed by a single contract. Additionally, tokens
+              controlled by the contract can have different types of fungibility.
+            </p>
+
+            <p>Supported fungibility types include:</p>
+
+            <ul>
+              <li>Fungible (ERC-20 like)</li>
+              <li>Semi-fungible</li>
+              <li>Non-fungible (ERC-721 like)</li>
+            </ul>
+
+            <p>
+              It also introduces a number of QoL features, such as bulk
+              approvals, where one approval applies to all token types held by
+              the contract. This removes the need for users to approve an
+              individual token each time they transact with it. Moreover, it
+              introduces batched transactions. As the contract supports multiple
+              tokens, it provides a mechanism to query balances for multiple
+              tokens in one transaction or to transfer multiple token types in
+              one transaction. Finally, it also implements safe transfers to
+              ensure that the receiving entity supports the ERC-1155 token type.
+            </p>
+
+            <h2>Semi-Fungibility</h2>
+
+            <p>
+              This fungibility type refers to a token that possesses unique
+              metadata and properties but can be held by multiple addresses. For
+              example, a game may require a key to gain access to a specific
+              level or hidden content. The token representing the key is unique
+              and would have metadata and properties related to the content it
+              unlocks. However, many users of the game may hold the token.
+            </p>
+
+            <p>
+              This type of token has characteristics of both an ERC-20 and
+              ERC-721. It represents a unique asset with its own properties and
+              metadata, like an ERC-721. However, these tokens have multiple
+              owners and are interchangeable with one another, as they represent
+              the same asset, much like an ERC-20.
+            </p>
+
+            <h2>Batch Operations</h2>
+
+            <p>
+              Batch operations introduce significant gas savings as they permit
+              multiple balance queries or transfers to be completed in a single
+              transaction. This is only possible as the ERC-1155 standard
+              maintains the state of multiple tokens in a single contract.
+            </p>
+
+            <p><strong>Batch Query Balance:</strong></p>
+
+            <p>
+              Queries an array of addresses (<code>accounts</code>) for the
+              balance they hold of the token type <code>id</code>. Returns an
+              array of token balances in the order of the
+              <code>accounts</code> provided to the function call.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">balanceOfBatch(address[] accounts, uint256[] ids) -&gt; uint256[]</code></pre>
+            </figure>
+
+            <ul>
+              <li>
+                The length of <code>accounts</code> must equal the length of
+                <code>ids</code>
+              </li>
+              <li>
+                You can query multiple addresses for the balance of different
+                tokens the contract holds
+                <ul>
+                  <li>
+                    E.g. query two addresses for the balance of
+                    gold(fungible), potions(semi-fungible) and unique
+                    swords(non-fungible) they each own, all in one transaction
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+            <p><strong>Batch Transfer:</strong></p>
+
+            <p>
+              You can transfer multiple different types of tokens from one
+              address to another in the same transaction.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">safeBatchTransferFrom(address from, address to, uint256[] ids, uint256[] amounts, bytes data);</code></pre>
+            </figure>
+
+            <ul>
+              <li>
+                <code>ids</code> and <code>amounts</code> must have the same
+                length
+              </li>
+              <li><code>to</code> must implement <code>onERC1155BatchReceived</code></li>
+            </ul>
+
+            <h3>OpenZeppelin extended batch functionality:</h3>
+
+            <p>
+              OpenZeppelin extended the batch features included in the ERC-1155
+              standard, introducing a <code>mintBatch</code> and a
+              <code>burnBatch</code>.
+            </p>
+
+            <p><strong>Mint Batch:</strong></p>
+
+            <p>
+              Mint multiple tokens in one transaction. The mint can also include
+              multiple types of tokens, e.g. mint ERC-20 and ERC-721 tokens to
+              the same address in a single transaction.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">_mintBatch(address to, uint256[] ids, uint256[] values, bytes data);</code></pre>
+            </figure>
+
+            <ul>
+              <li>
+                <code>ids</code> and <code>values</code> must have the same
+                length
+              </li>
+              <li><code>to</code> cannot be the zero address</li>
+              <li>
+                The <code>to</code> address must implement
+                <code>onERC1155BatchReceived</code>
+              </li>
+            </ul>
+
+            <p><strong>Burn Batch:</strong></p>
+
+            <p>Burn multiple tokens in a single transaction.</p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">_burnBatch(address from, uint256[] ids, uint256[] values);</code></pre>
+            </figure>
+
+            <ul>
+              <li><code>from</code> cannot be the zero address</li>
+              <li>
+                <code>from</code> must have at least the amount of tokens
+                specified in the <code>values</code> parameter of the token
+                represented by the array position
+              </li>
+              <li>
+                <code>ids</code> and <code>values</code> must have the same
+                length
+              </li>
+            </ul>
+
+            <h3>Supply Extension</h3>
+
+            <p>
+              This is an additional extension that can be used to track the total
+              supply of each of the tokens in the ERC-1155 contract. The only
+              balance related functionality enshrined in the ERC-1155 standard
+              is the <code>balanceOf</code> and <code>balanceOfBatch</code>
+              functions, that only reveal information about the tokens an
+              address holds.
+            </p>
+
+            <p>This extension adds the following functions:</p>
+
+            <ul>
+              <li>
+                <code>totalSupply(id)</code> which returns the total amount of
+                tokens with the id <code>id</code>.
+              </li>
+              <li>
+                <code>totalSupply()</code> which returns the number of tokens the
+                ERC1155 contract holds.
+              </li>
+              <li>
+                <code>exists(id)</code> returns a <code>bool</code> as to whether
+                the token of <code>id</code> exists
+              </li>
+            </ul>
+
+            <h2>Sources</h2>
+
+            <ol>
+              <li>
+                <a
+                  href="https://eips.ethereum.org/EIPS/eip-1155"
+                  target="_blank"
+                  rel="noopener"
+                  >EIP-1155: Multi Token Standard</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://ethereum.org/en/developers/docs/standards/tokens/erc-1155/"
+                  target="_blank"
+                  rel="noopener"
+                  >ERC-1155 — ethereum.org</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://docs.openzeppelin.com/contracts/5.x/erc1155"
+                  target="_blank"
+                  rel="noopener"
+                  >ERC-1155 — OpenZeppelin Contracts</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://docs.openzeppelin.com/contracts/5.x/api/token/erc1155#ERC1155"
+                  target="_blank"
+                  rel="noopener"
+                  >ERC1155 API — OpenZeppelin Contracts</a
+                >
+              </li>
+            </ol>
+          </div>
+
+          <footer class="article-footer">
+            <a href="../blog.html">&larr; Back to all articles</a>
+            <a
+              href="https://paragraph.com/@0xnelli/erc-1155-primer"
+              target="_blank"
+              rel="noopener"
+              >Original on Paragraph</a
+            >
+          </footer>
+        </article>
+
+        <footer>
+          <span class="copyright">&copy; 2026 Marcus Marinelli</span>
+          <a href="mailto:marcus.marinelli3@gmail.com">Contact me</a>
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>

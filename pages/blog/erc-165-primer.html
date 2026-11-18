@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="An ERC-165 primer: how contracts declare and detect the interfaces they support."
+    />
+    <link rel="stylesheet" href="../../stylesheets/_global.css" />
+    <link rel="stylesheet" href="../../stylesheets/pages/article.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="../../assets/images/favicon.svg"
+    />
+    <script src="../../scripts/vendor/prism-articles.js" defer></script>
+    <script type="module" src="../../scripts/article.js"></script>
+    <title>ERC-165 Primer — Marcus Marinelli</title>
+  </head>
+  <body>
+    <!-- Component: navbar -->
+    <header>
+      <a
+        href="../../index.html"
+        class="logo"
+        title="Marcus Marinelli — home"
+        aria-label="Marcus Marinelli — home"
+        >M<sup>2</sup></a
+      >
+
+      <nav class="nav-links" aria-label="Pages">
+        <a href="../cv.html">CV</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+      </nav>
+
+      <div class="external-links">
+        <a
+          href="https://github.com/MGM103"
+          target="_blank"
+          rel="noopener"
+          title="GitHub"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 192 192"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="12"
+              d="M120.755 170c.03-4.669.059-20.874.059-27.29 0-9.272-3.167-15.339-6.719-18.41 22.051-2.464 45.201-10.863 45.201-49.067 0-10.855-3.824-19.735-10.175-26.683 1.017-2.516 4.413-12.63-.987-26.32 0 0-8.296-2.672-27.202 10.204-7.912-2.213-16.371-3.308-24.784-3.352-8.414.044-16.872 1.14-24.785 3.352C52.457 19.558 44.162 22.23 44.162 22.23c-5.4 13.69-2.004 23.804-.987 26.32C36.824 55.498 33 64.378 33 75.233c0 38.204 23.149 46.603 45.2 49.067-3.551 3.071-6.719 9.138-6.719 18.41 0 6.416.03 22.621.059 27.29M27 130c9.939.703 15.67 9.735 15.67 9.735 8.834 15.199 23.178 10.803 28.815 8.265"
+            ></path>
+          </svg>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/marcus-marinelli-b1a10b1a0/"
+          target="_blank"
+          rel="noopener"
+          title="LinkedIn"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 20 20"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-180.000000, -7479.000000)"
+                fill="#000000"
+              >
+                <g id="icons" transform="translate(56.000000, 160.000000)">
+                  <path
+                    d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
+                    id="linkedin-[#161]"
+                    fill="currentColor"
+                  ></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="article">
+        <article>
+          <header class="article-header">
+            <a class="article-back" href="../blog.html">&larr; All articles</a>
+
+            <p class="article-kicker">
+              <time datetime="2024-11-14">14 Nov 2024</time>
+              <span>1 min read</span>
+            </p>
+
+            <h1>ERC-165 Primer</h1>
+            <p class="article-lede">
+              An interface identification mechanism that lets contracts declare
+              and detect the interfaces they support at compile time.
+            </p>
+          </header>
+
+          <div class="article-body">
+            <h2>Overview</h2>
+
+            <p>
+              ERC-165 is an interface identification mechanism that enhances
+              composability as contracts can determine whether a contract
+              supports an interface at compile time.
+            </p>
+
+            <h2>ERC-165 Goal</h2>
+
+            <p>
+              Prior to ERC-165, there was no mechanism to check whether a
+              contract supported a specific interface, such as ERC-20.
+              Therefore, there was no way of verifying whether a contract could
+              accept tokens or tokens sent to a contract would be 'stuck' and
+              effectively lost.
+            </p>
+
+            <h2>Implementation</h2>
+
+            <p>
+              ERC-165 introduces a standardised function to declare support for
+              specific interfaces within a given contract. Other contracts can
+              call this function to verify whether a certain interface is
+              supported.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">function supportsInterface(bytes4 interfaceId) external view returns (bool);</code></pre>
+            </figure>
+
+            <h3>Supporting multiple Interfaces</h3>
+
+            <p>In the wild you may have observed something like this:</p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">function supportsInterface(bytes4 interfaceId) public view    override(ERC1155, AccessControl) returns (bool) {
+    return super.supportsInterface(interfaceId);
+}</code></pre>
+            </figure>
+
+            <p>
+              This is required when a contract inherits multiple instances of
+              <code>supportsInterface</code> for different interface standards.
+              In the example above, the contract inherits from both ERC-1155 and
+              Access Control. The contract must override the
+              <code>supportsInterface</code> function and use the
+              <code>super</code> keyword to specify that the contract's own
+              <code>supportsInterface</code> function should combine the
+              functions from both interfaces. This way the
+              <code>supportsInterface</code> function will return
+              <code>true</code> for both queries with ERC-1155 and Access
+              Control.
+            </p>
+
+            <h2>Sources</h2>
+
+            <ol>
+              <li>
+                <a
+                  href="https://eips.ethereum.org/EIPS/eip-165"
+                  target="_blank"
+                  rel="noopener"
+                  >EIP-165: Standard Interface Detection</a
+                >
+              </li>
+            </ol>
+          </div>
+
+          <footer class="article-footer">
+            <a href="../blog.html">&larr; Back to all articles</a>
+            <a
+              href="https://paragraph.com/@0xnelli/erc-165-primer"
+              target="_blank"
+              rel="noopener"
+              >Original on Paragraph</a
+            >
+          </footer>
+        </article>
+
+        <footer>
+          <span class="copyright">&copy; 2026 Marcus Marinelli</span>
+          <a href="mailto:marcus.marinelli3@gmail.com">Contact me</a>
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>

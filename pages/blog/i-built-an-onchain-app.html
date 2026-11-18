@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="The motivation behind Go Fund Yourself and the reasoning behind its tech stack."
+    />
+    <link rel="stylesheet" href="../../stylesheets/_global.css" />
+    <link rel="stylesheet" href="../../stylesheets/pages/article.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="../../assets/images/favicon.svg"
+    />
+    <script type="module" src="../../scripts/article.js"></script>
+    <title>I built an Onchain App — Marcus Marinelli</title>
+  </head>
+  <body>
+    <!-- Component: navbar -->
+    <header>
+      <a
+        href="../../index.html"
+        class="logo"
+        title="Marcus Marinelli — home"
+        aria-label="Marcus Marinelli — home"
+        >M<sup>2</sup></a
+      >
+
+      <nav class="nav-links" aria-label="Pages">
+        <a href="../cv.html">CV</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+      </nav>
+
+      <div class="external-links">
+        <a
+          href="https://github.com/MGM103"
+          target="_blank"
+          rel="noopener"
+          title="GitHub"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 192 192"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="12"
+              d="M120.755 170c.03-4.669.059-20.874.059-27.29 0-9.272-3.167-15.339-6.719-18.41 22.051-2.464 45.201-10.863 45.201-49.067 0-10.855-3.824-19.735-10.175-26.683 1.017-2.516 4.413-12.63-.987-26.32 0 0-8.296-2.672-27.202 10.204-7.912-2.213-16.371-3.308-24.784-3.352-8.414.044-16.872 1.14-24.785 3.352C52.457 19.558 44.162 22.23 44.162 22.23c-5.4 13.69-2.004 23.804-.987 26.32C36.824 55.498 33 64.378 33 75.233c0 38.204 23.149 46.603 45.2 49.067-3.551 3.071-6.719 9.138-6.719 18.41 0 6.416.03 22.621.059 27.29M27 130c9.939.703 15.67 9.735 15.67 9.735 8.834 15.199 23.178 10.803 28.815 8.265"
+            ></path>
+          </svg>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/marcus-marinelli-b1a10b1a0/"
+          target="_blank"
+          rel="noopener"
+          title="LinkedIn"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 20 20"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-180.000000, -7479.000000)"
+                fill="#000000"
+              >
+                <g id="icons" transform="translate(56.000000, 160.000000)">
+                  <path
+                    d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
+                    id="linkedin-[#161]"
+                    fill="currentColor"
+                  ></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="article">
+        <article>
+          <header class="article-header">
+            <a class="article-back" href="../blog.html">&larr; All articles</a>
+
+            <p class="article-kicker">
+              <time datetime="2024-11-07">7 Nov 2024</time>
+              <span>9 min read</span>
+            </p>
+
+            <h1>I built an Onchain App</h1>
+            <p class="article-lede">
+              The motivation for building Go Fund Yourself, and the reasoning
+              behind choosing SvelteKit, Wagmi, Sepolia, SQLite and a
+              self-hosted deployment.
+            </p>
+          </header>
+
+          <div class="article-body">
+            <h2>Motivation</h2>
+
+            <p>
+              As a long-time onchain enthusiast who has been dabbling in DeFi and
+              battling with MetaMask since 2020, I have always marvelled at the
+              premier onchain apps. Apps like Aave and Uniswap are so clean and
+              always iterating and improving. Furthermore and perhaps most
+              importantly, in the most adversarial environment imaginable with
+              billions of dollars at stake, these apps have never been exploited.
+            </p>
+
+            <p><em>I hope I didn't just jinx that 😬🤞</em></p>
+
+            <p>
+              But since I started using these applications, I have graduated from
+              university as a software engineer and have a few years of
+              experience under my belt. I no longer marvel at onchain apps. Now
+              they pique my curiosity. What goes into creating an onchain app?
+              What is the best way to build one? How much effort does it take to
+              go from nothing to a URL that hosts a clean frontend that allows
+              users to interact with a decentralised protocol? I needed to find
+              out, so that's why I built an onchain app.
+            </p>
+
+            <h2>The Idea</h2>
+
+            <p>
+              Ultimately the idea doesn't matter too much here. The purpose of
+              this project is to understand how to build the thing, rather than
+              building the thing itself. I know, I know, if you are passionate
+              about the application you are building, the odds of you completing
+              it dramatically increase. But you know what, I am passionate about
+              learning so that'll suffice.
+            </p>
+
+            <p>So what am I building?</p>
+
+            <p>
+              Anyone who has attempted to develop anything onchain would have
+              undoubtedly come across the man himself
+              <a
+                href="https://twitter.com/PatrickAlphaC"
+                target="_blank"
+                rel="noopener"
+                >Patrick Collins</a
+              >. The content he has created is at the pinnacle of
+              <a href="https://updraft.cyfrin.io/" target="_blank" rel="noopener"
+                >onchain development and security</a
+              >. I strongly recommend you check it out.
+            </p>
+
+            <p>
+              In one of his
+              <a
+                href="https://www.youtube.com/watch?v=sas02qSFZ74&amp;list=PL4Rj_WH6yLgWe7TxankiqkrkVKXIwOP42&amp;index=2"
+                target="_blank"
+                rel="noopener"
+                >courses</a
+              >, the exercise is to build a set of smart contracts that facilitate
+              decentralised fundraising. The project allows the owner of the
+              contract to raise funds and withdraw them to presumably go out and
+              do what they promised to do with the funds. However, in the onchain
+              world, this isn't always what happens with teams that raise big
+              funds.
+            </p>
+
+            <figure class="article-figure">
+              <img
+                src="../../assets/images/blog/web3-founder-mode.jpg"
+                alt="Meme labelled Web3 Founder Mode"
+                width="300"
+                height="168"
+                loading="lazy"
+              />
+              <figcaption>Web3 Founder Mode</figcaption>
+            </figure>
+
+            <p>
+              Shenanigans aside, I thought I would extend the capabilities of
+              this project to scale to multiple users being able to create
+              different fund-raises that anyone with a MetaMask can contribute
+              to. To build a Kickstarter-esque onchain application.
+            </p>
+
+            <p>
+              And with that decision made, it became time to select the tech
+              stack I would use to create my new app,
+              <strong>Go Fund Yourself.</strong>
+            </p>
+
+            <figure class="article-figure">
+              <img
+                src="../../assets/images/blog/go-fund-yourself-name.webp"
+                alt="Meme about stealing the Go Fund Yourself name from South Park"
+                width="1000"
+                height="563"
+                loading="lazy"
+              />
+              <figcaption>Yes I stole the name from South Park...</figcaption>
+            </figure>
+
+            <h2>Choosing the tech stack</h2>
+
+            <h3>Frontend</h3>
+
+            <p>
+              In this day and age, there is certainly no shortage of frontend
+              frameworks to choose from. I personally use Vue.js at work, so I
+              ruled it out as I wanted to try something new. Based on the docs
+              for different onchain libraries (more on this later), Next.js and
+              React seem to be the most popular. While these frameworks will
+              undoubtedly boost your employability, the contrarian within me
+              wouldn't allow it. Also as someone who uses Vue.js regularly, I
+              really do enjoy the templating in a Vue component as opposed to
+              JSX, so that played a factor too.
+            </p>
+
+            <p>
+              I ultimately opted for SvelteKit. I get templating syntax which is
+              my preference. Additionally, I wanted to try a meta-framework to
+              better understand their strengths and weaknesses and familiarise
+              myself with the server and client-side separations when developing
+              components. Moreover, Svelte is consistently voted as one of the
+              most admired frontend frameworks by developer surveys and I'm a
+              big fan of Svelte's philosophy:
+            </p>
+
+            <blockquote>
+              <p>
+                "Svelte is a superset of HTML" — Rich Harris (Svelte founder)
+              </p>
+            </blockquote>
+
+            <p>
+              Some front-end frameworks stray far from the idiomatic HTML,
+              JavaScript &amp; CSS that I first used to create simple websites.
+              It was with these languages that I first fell in love with coding.
+              I wanted to see if Svelte made good on its promise of simplicity
+              and idiomatic use of the aforementioned languages and could emulate
+              that feeling of when I first started building websites.
+            </p>
+
+            <p>
+              For more info on Svelte, I strongly recommend checking out Rich's
+              interviews with the
+              <a
+                href="https://www.youtube.com/watch?v=4tBYVFXSJbo&amp;t=2862s"
+                target="_blank"
+                rel="noopener"
+                >Primeagen</a
+              >
+              and
+              <a
+                href="https://www.youtube.com/watch?v=z7n17ajJpCo"
+                target="_blank"
+                rel="noopener"
+                >Prismic</a
+              >. Additionally, the man himself Patrick Collins made a
+              <a
+                href="https://www.youtube.com/watch?v=f_nkq_w4eOU&amp;t=13759s"
+                target="_blank"
+                rel="noopener"
+                >stream</a
+              >
+              for web3 front-end development and he was using SvelteKit. I saw
+              this as a good omen. How could I not give Svelte a crack?
+            </p>
+
+            <h3>Onchain Libraries</h3>
+
+            <p>
+              You might be thinking, what on Earth is an onchain library? These
+              are JavaScript libraries that provide utilities for all types of
+              interactions with blockchains. These libraries greatly simplify
+              the process of reading/writing from/to smart contracts, managing
+              wallet connections and updating the state of your application
+              accordingly.
+            </p>
+
+            <p>
+              As far as I am aware, there are three major EVM libraries to
+              consider:
+            </p>
+
+            <ol>
+              <li>
+                <a href="https://docs.web3js.org/" target="_blank" rel="noopener"
+                  >Web3.js</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://docs.ethers.org/v5/getting-started/"
+                  target="_blank"
+                  rel="noopener"
+                  >Ethers.js</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://wagmi.sh/core/getting-started"
+                  target="_blank"
+                  rel="noopener"
+                  >Wagmi</a
+                >
+              </li>
+            </ol>
+
+            <p>
+              Each has its pros and cons. There's a fantastic article on
+              <a
+                href="https://sveltekit.io/blog/web3-svelte"
+                target="_blank"
+                rel="noopener"
+                >SvelteKit.io</a
+              >
+              that breaks down the different library alternatives when creating
+              an onchain SvelteKit app. I strongly recommend you check it out.
+            </p>
+
+            <p>But I'll break down my decision for you here quickly:</p>
+
+            <ul>
+              <li>
+                Web3.js is the most mature of the three and offers a rich set of
+                features. However, it is quite a large bundle and is not quite as
+                performant as the other options.
+              </li>
+              <li>
+                I have worked with Ethers.js in the past and found the DX to be
+                okay; it is more performant than Web3.js, but lacks certain
+                utilities that are offered by Wagmi.
+              </li>
+              <li>
+                Wagmi has both good performance and a rich set of utilities.
+                Furthermore, it is rapidly gaining in popularity and is used by
+                some of the biggest projects in the onchain world.
+              </li>
+            </ul>
+
+            <p>
+              I ultimately chose Wagmi. It's important to note that when using
+              Svelte, the Wagmi core JS library will power onchain interactions.
+              There are specific libraries for React and Vue that offer hooks or
+              composables, but these of course are of no use to us. However,
+              there is an unofficial
+              <a
+                href="https://github.com/softwarecurator/svelte-wagmi"
+                target="_blank"
+                rel="noopener"
+                >SvelteKit-specific library</a
+              >
+              that has received high praise from Svelte developers. It offers
+              Wagmi stores that simplify integrating Wagmi into your Svelte app,
+              which I did take advantage of.
+            </p>
+
+            <h4>RPCs</h4>
+
+            <p>
+              If you are developing anything that is connected to a blockchain
+              you will need an RPC (Remote Procedure Call). At a high level, RPC
+              is a protocol that allows a client (you or your app) to perform
+              operations on a server (the blockchain).
+            </p>
+
+            <p>
+              There are two major service providers that I am aware of for this:
+              <a
+                href="https://docs.infura.io/api"
+                target="_blank"
+                rel="noopener"
+                >Infura</a
+              >
+              and
+              <a
+                href="https://docs.alchemy.com/reference/ethereum-api-quickstart"
+                target="_blank"
+                rel="noopener"
+                >Alchemy</a
+              >. I have used Alchemy before and reused an RPC that I created
+              previously, but I urge you to investigate both and choose the best
+              option for you.
+            </p>
+
+            <h3>Backend</h3>
+
+            <p>The backend for this app is the blockchain, obviously! But which one?</p>
+
+            <p>
+              The first decision is whether to deploy the contracts to a testnet
+              or mainnet. The former does not use real assets of value whereas
+              the latter does. I decided for my first onchain app to deploy to a
+              testnet while learning the ropes, ensuring my own or any potential
+              user funds are not in jeopardy. After all, this is a learning
+              exercise.
+            </p>
+
+            <p>
+              Next decision: which testnet? For this I decided to stick with
+              Ethereum Sepolia, as it has all the integrations with major service
+              providers you can ask for, like Alchemy and
+              <a href="https://docs.chain.link/" target="_blank" rel="noopener"
+                >Chainlink</a
+              >. Also procuring Sepolia testnet ETH to make transactions is
+              pretty straightforward as there are plenty of faucets available.
+            </p>
+
+            <p>
+              Finally, I decided that I did not want all the data this app
+              collects to be stored onchain. I used an SQLite database to store
+              the descriptions of why each user is raising funds for their
+              fundraiser. Storing this information in a database saves users gas
+              fees. Additionally, I wanted the experience of working with
+              SvelteKit and SQLite. I wanted to learn the pitfalls and proper
+              patterns involved in CRUD operations with a frontend meta-framework
+              and a database.
+            </p>
+
+            <h3>DevOps</h3>
+
+            <blockquote>
+              <p>
+                "Work incredibly hard in order to be incredibly lazy" — Patrick
+                Collins
+              </p>
+            </blockquote>
+
+            <p>
+              I absolutely love this quote from Patrick. It captures the essence
+              and ethos of software development so well. As a software engineer,
+              you want to work exceedingly hard to automate your workflow as much
+              as possible, so you can be lazy when developing. 'Lazy' meaning you
+              can focus only on delivering value, as the tedious work that needs
+              to be done around shipping is taken care of for you.
+            </p>
+
+            <p>How does this translate to the Go Fund Yourself app?</p>
+
+            <p>
+              I would like to set up the project so that any changes I push to the
+              main branch of my repo are automatically deployed into production
+              and accessible to users nearly immediately after I make these
+              changes. This pertains to the changes made to the frontend, not the
+              smart contracts which are immutable.
+            </p>
+
+            <p>
+              This raises the question: how am I hosting my frontend? After
+              listening to the Lex Fridman podcast with
+              <a
+                href="https://www.youtube.com/watch?v=oFtjKbXKqbg&amp;t=1s"
+                target="_blank"
+                rel="noopener"
+                >Pieter Levels</a
+              >, I was inspired to learn how to host my own applications on a
+              VPS. There are a plethora of services that simplify the deployment
+              and hosting process. However, according to this podcast, it seems
+              that Pieter runs an entire empire using some VPSes and Nginx.
+              Furthermore, the hallmark of a great software engineer is the
+              ability to rawdog it rather than using the latest abstracted
+              solution.
+            </p>
+
+            <p>
+              So the DevOps requirement of this project is to spin up a VPS, set
+              it up to run my SvelteKit application and then create a pipeline to
+              allow the latest changes I have made to automatically be detected
+              by the server, pulled in and then run so that they are accessible
+              to the end users.
+            </p>
+
+            <p>
+              To achieve this I chose
+              <a href="https://hpanel.hostinger.com/servers" target="_blank" rel="noopener"
+                >Hostinger</a
+              >
+              for the VPS,
+              <a
+                href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy"
+                target="_blank"
+                rel="noopener"
+                >Nginx</a
+              >
+              for a reverse proxy,
+              <a href="https://certbot.eff.org/pages/about" target="_blank" rel="noopener"
+                >Certbot</a
+              >
+              for SSL certificates to enable HTTPS and
+              <a href="https://docs.github.com/en/actions" target="_blank" rel="noopener"
+                >GitHub Actions</a
+              >
+              and
+              <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener"
+                >Docker</a
+              >
+              to create the pipeline.
+            </p>
+
+            <h2>Wrapping up</h2>
+
+            <p>
+              The purpose of this article was to explain the motivation for
+              building Go Fund Yourself and the reasoning that went into
+              selecting the different technologies in the tech stack.
+            </p>
+
+            <p>
+              While this started as an exercise to understand the process of
+              onchain app development, I admittedly increased the scope of the
+              project to include aspects of Web2 development that I haven't had
+              much experience in yet. I could have stored all the information
+              about fund-raises on the blockchain. However, I chose to include an
+              SQLite database, because I have never worked with this database
+              before. Additionally, I wanted to understand the process of using a
+              front-end meta-framework with a database. For deployment, I could
+              have used
+              <a href="https://vercel.com/" target="_blank" rel="noopener">Vercel</a>
+              or another similar service. However, I wanted to understand what it
+              took to configure your own server and pipelines to better
+              comprehend why these abstracted solutions have gained so much
+              popularity. Is setting up your own server worth the heartache or
+              should you just use Vercel? What are the trade-offs? These are the
+              questions I was seeking to answer.
+            </p>
+
+            <p>
+              This is just the first article in a series I am working on. Now
+              that you know my thought process, I look forward to sharing with
+              you how I built Go Fund Yourself. In this series, I will explore
+              the pitfalls and learnings of each stage of the development
+              process. I hope you can use this series to gain a better
+              understanding of onchain development, as a blueprint to build your
+              own onchain app or even as a tutorial to add to your portfolio on
+              GitHub.
+            </p>
+
+            <p>
+              Make sure you subscribe to ensure you do not miss new instalments
+              of this series.
+            </p>
+
+            <p>And please feel free to mint to show support.</p>
+
+            <p>
+              I look forward to seeing you in the
+              <a href="i-built-an-onchain-app-front-end-part-1.html"
+                >next article</a
+              >, where I delve into SvelteKit and front-end development. 👋
+            </p>
+          </div>
+
+          <footer class="article-footer">
+            <a href="../blog.html">&larr; Back to all articles</a>
+            <a
+              href="https://paragraph.com/@0xnelli/i-built-an-onchain-app"
+              target="_blank"
+              rel="noopener"
+              >Original on Paragraph</a
+            >
+          </footer>
+        </article>
+
+        <footer>
+          <span class="copyright">&copy; 2026 Marcus Marinelli</span>
+          <a href="mailto:marcus.marinelli3@gmail.com">Contact me</a>
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>

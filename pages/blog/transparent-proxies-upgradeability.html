@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="How upgradeable smart contracts work, where storage and logic collide, and how transparent proxies and ERC-1967 keep them safe."
+    />
+    <link rel="stylesheet" href="../../stylesheets/_global.css" />
+    <link rel="stylesheet" href="../../stylesheets/pages/article.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="../../assets/images/favicon.svg"
+    />
+    <script src="../../scripts/vendor/prism-articles.js" defer></script>
+    <script type="module" src="../../scripts/article.js"></script>
+    <title>Transparent Proxies &amp; Upgradeability — Marcus Marinelli</title>
+  </head>
+  <body>
+    <!-- Component: navbar -->
+    <header>
+      <a
+        href="../../index.html"
+        class="logo"
+        title="Marcus Marinelli — home"
+        aria-label="Marcus Marinelli — home"
+        >M<sup>2</sup></a
+      >
+
+      <nav class="nav-links" aria-label="Pages">
+        <a href="../cv.html">CV</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+      </nav>
+
+      <div class="external-links">
+        <a
+          href="https://github.com/MGM103"
+          target="_blank"
+          rel="noopener"
+          title="GitHub"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 192 192"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="12"
+              d="M120.755 170c.03-4.669.059-20.874.059-27.29 0-9.272-3.167-15.339-6.719-18.41 22.051-2.464 45.201-10.863 45.201-49.067 0-10.855-3.824-19.735-10.175-26.683 1.017-2.516 4.413-12.63-.987-26.32 0 0-8.296-2.672-27.202 10.204-7.912-2.213-16.371-3.308-24.784-3.352-8.414.044-16.872 1.14-24.785 3.352C52.457 19.558 44.162 22.23 44.162 22.23c-5.4 13.69-2.004 23.804-.987 26.32C36.824 55.498 33 64.378 33 75.233c0 38.204 23.149 46.603 45.2 49.067-3.551 3.071-6.719 9.138-6.719 18.41 0 6.416.03 22.621.059 27.29M27 130c9.939.703 15.67 9.735 15.67 9.735 8.834 15.199 23.178 10.803 28.815 8.265"
+            ></path>
+          </svg>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/marcus-marinelli-b1a10b1a0/"
+          target="_blank"
+          rel="noopener"
+          title="LinkedIn"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 20 20"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-180.000000, -7479.000000)"
+                fill="#000000"
+              >
+                <g id="icons" transform="translate(56.000000, 160.000000)">
+                  <path
+                    d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
+                    id="linkedin-[#161]"
+                    fill="currentColor"
+                  ></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="article">
+        <article>
+          <header class="article-header">
+            <a class="article-back" href="../blog.html">&larr; All articles</a>
+
+            <p class="article-kicker">
+              <time datetime="2024-11-14">14 Nov 2024</time>
+              <span>6 min read</span>
+            </p>
+
+            <h1>Transparent Proxies &amp; Upgradeability</h1>
+            <p class="article-lede">
+              How upgradeable smart contracts work, where storage and logic
+              collide, and how transparency and ERC-1967 keep proxies safe.
+            </p>
+          </header>
+
+          <div class="article-body">
+            <h2>The Goal of the Proxy Pattern</h2>
+
+            <p>
+              Smart contracts are immutable, therefore it is not possible to
+              change the logic of a smart contract once it has been deployed.
+              However, the ability to update code is often vital, whether to add
+              new features or to patch critical bugs and defects. This is what
+              the proxy pattern offers to developers, a means of updating code
+              by introducing upgradeability to smart contracts.
+            </p>
+
+            <p>
+              Upgradeability is achieved by separating storage and logic. A proxy
+              contract contains the state and delegates execution to a logic
+              contract. There is an opcode specifically for this called
+              <code>delegatecall</code>. <code>delegatecall</code> executes the
+              code of a target address with the context of the caller. Meaning
+              that the state of the caller is used with the logic of the target.
+            </p>
+
+            <p>
+              To upgrade the logic, the proxy can be updated to reference a
+              different logic contract with updated logic.
+            </p>
+
+            <figure class="article-figure">
+              <img
+                src="../../assets/images/blog/proxy-pattern-flow.png"
+                alt="Diagram showing a proxy contract holding state and delegating execution to a logic contract"
+                width="766"
+                height="92"
+                loading="lazy"
+              />
+              <figcaption>Proxy pattern flow (Credit: OpenZeppelin)</figcaption>
+            </figure>
+
+            <h2>The Problems with Proxies</h2>
+
+            <p>
+              Conceptually the proxy setup is quite simple to grasp, however, it
+              introduces a host of problems if not careful. A key issue that
+              arises as a result of this pattern is clashes. This occurs for both
+              the variables and function signatures of the proxy and logic
+              contracts.
+            </p>
+
+            <h3>Variable clashes</h3>
+
+            <h4>Updating the incorrect state variable</h4>
+
+            <p>
+              This example is taken from a
+              <a
+                href="https://www.rareskills.io/post/delegatecall"
+                target="_blank"
+                rel="noopener"
+                >RareSkills article</a
+              >
+              on <code>delegatecall</code>, please check it and RareSkills out.
+            </p>
+
+            <p>
+              Given the following contracts <code>Proxy</code> and
+              <code>Logic</code>, unintended behaviour arises as a result of
+              variable clashes.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">contract Logic {
+    uint public number;
+
+    function increment() public {
+        number++;
+    }
+}
+
+contract Proxy {
+    address public calledAddress = 0xd9145CCE52D386f254917e481eB44e9943F39138;
+
+    uint public myNumber;
+
+    function callIncrement() public {        
+        calledAddress.delegatecall(
+            abi.encodeWithSignature("increment()")
+        );
+    }
+}</code></pre>
+            </figure>
+
+            <p>
+              The <code>Proxy::callIncrement</code> function will call the
+              <code>Logic::increment</code> function (shocking I know) with the
+              context of the <code>Proxy</code> contract. The way the
+              <code>increment</code> function should be interpreted is: to
+              increment the value of storage slot zero of the contract. As stated
+              in the article "<strong
+                >the name of the variable doesn't matter; what is fundamental is
+                which slot it is in.</strong
+              >"
+            </p>
+
+            <p>
+              Remember this logic was executed in the context of the Proxy
+              contract. If storage slot zero is to be incremented by one, the
+              <code>calledAddress</code> variable will then be updated to
+              <code>0xd9145CCE52D386f254917e481eB44e9943F39139</code>. This breaks
+              the Proxy contract as it is no longer able to delegate to the Logic
+              contract. It is imperative to ensure there are no collisions
+              between the slots of the Proxy and Logic contract as it can lead to
+              unexpected behaviour breaking the smart contract.
+            </p>
+
+            <h4>Reading from the incorrect state variable</h4>
+
+            <p>
+              Again referencing an example from
+              <a
+                href="https://www.rareskills.io/post/delegatecall"
+                target="_blank"
+                rel="noopener"
+                >RareSkills</a
+              >, the following set of contracts have a crucial flaw due to
+              variable clashes between <code>Proxy</code> and
+              <code>Logic</code> contracts.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">contract Logic {
+    uint public discountRate = 20;
+
+    function calculateDiscountPrice(uint256 amount) public pure returns (uint) {
+        return amount - (amount * discountRate)/100;
+    }
+}
+
+contract Proxy {
+    uint public price = 200;
+    address public called;
+
+    function setCalled(address _called) public {
+        called = _called;
+    }
+
+    function setDiscount() public  {
+        (bool success, bytes memory data) = called.delegatecall(
+            abi.encodeWithSignature(
+                "calculateDiscountPrice(uint256)", 
+                price
+            )
+        );
+
+        if (success) {
+            uint newPrice = abi.decode(data, (uint256));
+            price = newPrice;
+        }
+    }
+}</code></pre>
+            </figure>
+
+            <p>
+              The <code>Logic::calculateDiscountPrice</code> function reads the
+              state variable <code>discountRate</code> to calculate the new
+              discounted price. However, this function is executed within the
+              context of the <code>Proxy</code> contract. What the
+              <code>Logic::calculateDiscountPrice</code> function is really doing
+              is multiplying the parameter <code>amount</code> by the value in
+              storage slot 0, dividing it by 100 and subtracting this from the
+              original <code>amount</code> value. The
+              <code>discountRate</code> is supposed to be 20, however, when
+              executing within the context of the <code>Proxy</code> it is 200,
+              as that is the value in storage slot 0. This leads to the state
+              variable <code>price</code> being updated to the wrong value.
+            </p>
+
+            <h3>Function signature clashes</h3>
+
+            <p>
+              In the EVM each function is identified by the first 4-bytes of its
+              Keccak-256 hash. An issue can arise in the Proxy pattern where
+              different functions in the logic and proxy contracts both share the
+              same signature.
+            </p>
+
+            <p>
+              The example below is taken from an
+              <a
+                href="https://forum.openzeppelin.com/t/beware-of-the-proxy-learn-how-to-exploit-function-clashing/1070"
+                target="_blank"
+                rel="noopener"
+                >OpenZeppelin blogpost</a
+              >. It can be observed that the hash of
+              <code>collate_propagate_storage(bytes16)</code> is the same as
+              <code>burn(uint256)</code>.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Solidity</figcaption>
+              <pre><code class="language-solidity">pragma solidity ^0.5.0;
+
+contract Proxy {
+    
+    address public proxyOwner;
+    address public implementation;
+
+    constructor(address implementation) public {
+        proxyOwner = msg.sender;
+        _setImplementation(implementation);
+    }
+
+    modifier onlyProxyOwner() {
+        require(msg.sender == proxyOwner);
+        _;
+    }
+
+    function upgrade(address implementation) external onlyProxyOwner {
+        _setImplementation(implementation);
+    }
+
+    function _setImplementation(address imp) private {
+        implementation = imp;
+    }
+
+    function () payable external {
+        address impl = implementation;
+
+        assembly {
+            calldatacopy(0, 0, calldatasize)
+            let result := delegatecall(gas, impl, 0, calldatasize, 0, 0)
+            returndatacopy(0, 0, returndatasize)
+
+            switch result
+            case 0 { revert(0, returndatasize) }
+            default { return(0, returndatasize) }
+        }
+    }
+    
+    // This is the function we're adding now
+    function collate_propagate_storage(bytes16) external {
+        implementation.delegatecall(abi.encodeWithSignature(
+            "transfer(address,uint256)", proxyOwner, 1000
+        ));
+    }
+}</code></pre>
+            </figure>
+
+            <p>
+              Therefore if a user calls the <code>Proxy</code> to burn some
+              tokens it will match the signature of
+              <code>collate_propagate_storage(bytes16)</code> and send 1000
+              tokens to the owner of the proxy instead.
+            </p>
+
+            <p>
+              Note that this cannot occur in a singular contract, as the compiler
+              will identify a clash of signatures and throw an error.
+            </p>
+
+            <h3>Constructor Caveats</h3>
+
+            <p>
+              Code in the constructor of a logic contract is effectively useless
+              as the code only runs once during its deployment and any resulting
+              state changes are irrelevant as the context of execution comes from
+              the Proxy contract. As said in the
+              <a
+                href="https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies"
+                target="_blank"
+                rel="noopener"
+                >proxies blog</a
+              >
+              on OpenZeppelin: "Proxies are completely oblivious to the storage
+              trie changes that are performed by the constructor."
+            </p>
+
+            <p>
+              Therefore, in any logic contract, if there is any initial setup
+              required, an <code>initializer</code> function should be used.
+              OpenZeppelin supports this with its host of
+              <code>upgradeable</code> contracts.
+            </p>
+
+            <h2>Transparent Proxies</h2>
+
+            <p>
+              Transparent proxies are a standard way of implementing
+              upgradeability via a proxy contract that avoids the pitfalls
+              previously explored.
+            </p>
+
+            <p>
+              Transparent proxies have message-routing logic based on the
+              <code>msg.sender</code>. If the caller is the
+              <code>admin</code> of the Proxy contract, the proxy will not
+              delegate calls. If the caller is not the
+              <code>admin</code> the proxy will always delegate calls. This
+              behaviour is demonstrated in the table below:
+            </p>
+
+            <figure class="article-figure">
+              <img
+                src="../../assets/images/blog/proxy-routing.png"
+                alt="Table of transparent proxy call routing by sender"
+                width="622"
+                height="127"
+                loading="lazy"
+              />
+              <figcaption>msg.sender routing</figcaption>
+            </figure>
+
+            <h3>ERC-1967</h3>
+
+            <p>
+              Every proxy must store the address of the logic contract, however
+              as previously explored there is a danger of storage variable
+              clashes altering this value. To ensure that a clash never occurs
+              for the address of the logic function, ERC-1967 implemented a
+              reserved slot for storing the address of a logic contract. This
+              ensures that the compiler will never assign a variable to this
+              slot, preventing clashes and unexpected behaviour from occurring.
+              All proxy contracts from OpenZeppelin implement ERC-1967.
+            </p>
+
+            <h2>Sources</h2>
+
+            <ol>
+              <li>
+                <a
+                  href="https://blog.openzeppelin.com/the-transparent-proxy-pattern"
+                  target="_blank"
+                  rel="noopener"
+                  >The Transparent Proxy Pattern — OpenZeppelin</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://docs.openzeppelin.com/contracts/5.x/api/proxy#Proxy"
+                  target="_blank"
+                  rel="noopener"
+                  >Proxy — OpenZeppelin Contracts</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies"
+                  target="_blank"
+                  rel="noopener"
+                  >Proxies — OpenZeppelin Upgrades Plugins</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://eips.ethereum.org/EIPS/eip-1967"
+                  target="_blank"
+                  rel="noopener"
+                  >EIP-1967: Proxy Storage Slots</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.rareskills.io/post/delegatecall"
+                  target="_blank"
+                  rel="noopener"
+                  >delegatecall — RareSkills</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://forum.openzeppelin.com/t/beware-of-the-proxy-learn-how-to-exploit-function-clashing/1070"
+                  target="_blank"
+                  rel="noopener"
+                  >Beware of the proxy: learn how to exploit function
+                  clashing</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://medium.com/nomic-foundation-blog/malicious-backdoors-in-ethereum-proxies-62629adf3357"
+                  target="_blank"
+                  rel="noopener"
+                  >Malicious backdoors in Ethereum proxies — Nomic
+                  Foundation</a
+                >
+              </li>
+            </ol>
+          </div>
+
+          <footer class="article-footer">
+            <a href="../blog.html">&larr; Back to all articles</a>
+            <a
+              href="https://paragraph.com/@0xnelli/transparent-proxies-upgradeability"
+              target="_blank"
+              rel="noopener"
+              >Original on Paragraph</a
+            >
+          </footer>
+        </article>
+
+        <footer>
+          <span class="copyright">&copy; 2026 Marcus Marinelli</span>
+          <a href="mailto:marcus.marinelli3@gmail.com">Contact me</a>
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>

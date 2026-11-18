@@ -1,0 +1,91 @@
+/*
+ * Prism token colours for article code blocks. Muted accent hues keep code
+ * legible without breaking the site's neutral palette.
+ */
+@layer components {
+	:root {
+		--code-keyword: oklch(45% 0.15 285);
+		--code-string: oklch(42% 0.12 155);
+		--code-number: oklch(48% 0.14 55);
+		--code-function: oklch(44% 0.13 240);
+		--code-class: oklch(46% 0.13 300);
+		--code-variable: oklch(48% 0.14 25);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--code-keyword: oklch(78% 0.13 285);
+			--code-string: oklch(80% 0.12 155);
+			--code-number: oklch(82% 0.13 55);
+			--code-function: oklch(80% 0.12 240);
+			--code-class: oklch(80% 0.13 300);
+			--code-variable: oklch(82% 0.12 25);
+		}
+	}
+
+	.token.comment,
+	.token.prolog,
+	.token.doctype,
+	.token.cdata {
+		color: color-mix(in oklch, var(--color-secondary), transparent 45%);
+		font-style: italic;
+	}
+
+	.token.punctuation {
+		color: color-mix(in oklch, var(--color-secondary), transparent 25%);
+	}
+
+	.token.keyword,
+	.token.atrule,
+	.token.rule,
+	.token.important {
+		color: var(--code-keyword);
+	}
+
+	.token.string,
+	.token.char,
+	.token.attr-value,
+	.token.selector,
+	.token.inserted {
+		color: var(--code-string);
+	}
+
+	.token.number,
+	.token.boolean,
+	.token.constant,
+	.token.symbol,
+	.token.deleted {
+		color: var(--code-number);
+	}
+
+	.token.function {
+		color: var(--code-function);
+	}
+
+	.token.class-name,
+	.token.builtin,
+	.token.namespace {
+		color: var(--code-class);
+	}
+
+	.token.variable,
+	.token.attr-name,
+	.token.property,
+	.token.tag {
+		color: var(--code-variable);
+	}
+
+	.token.operator,
+	.token.entity,
+	.token.url {
+		color: color-mix(in oklch, var(--color-secondary), transparent 20%);
+	}
+
+	.token.bold {
+		font-weight: 700;
+	}
+
+	.token.italic {
+		font-style: italic;
+	}
+}

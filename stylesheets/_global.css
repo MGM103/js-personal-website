@@ -39,7 +39,9 @@
 }
 
 main {
-	padding-top: var(--header-height);
+	/* Desktop clears the fixed navbar plus enough space for the oversized
+	   logo so page headings do not crowd the mark. */
+	padding-top: calc(var(--header-height) + 2rem);
 
 	/* Mobile has no fixed navbar, so the content can start closer to the top.
 	   The bottom padding keeps the footer clear of the floating menu button. */

@@ -1,0 +1,2119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Building the front end of a crowdfunding dApp with SvelteKit: design decisions, routing, transitions and scroll animations."
+    />
+    <link rel="stylesheet" href="../../stylesheets/_global.css" />
+    <link rel="stylesheet" href="../../stylesheets/pages/article.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="../../assets/images/favicon.svg"
+    />
+    <script src="../../scripts/vendor/prism-articles.js" defer></script>
+    <script type="module" src="../../scripts/article.js"></script>
+    <title>I built an Onchain App: Front-end - Part 1 — Marcus Marinelli</title>
+  </head>
+  <body>
+    <!-- Component: navbar -->
+    <header>
+      <a
+        href="../../index.html"
+        class="logo"
+        title="Marcus Marinelli — home"
+        aria-label="Marcus Marinelli — home"
+        >M<sup>2</sup></a
+      >
+
+      <nav class="nav-links" aria-label="Pages">
+        <a href="../cv.html">CV</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+      </nav>
+
+      <div class="external-links">
+        <a
+          href="https://github.com/MGM103"
+          target="_blank"
+          rel="noopener"
+          title="GitHub"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 192 192"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="12"
+              d="M120.755 170c.03-4.669.059-20.874.059-27.29 0-9.272-3.167-15.339-6.719-18.41 22.051-2.464 45.201-10.863 45.201-49.067 0-10.855-3.824-19.735-10.175-26.683 1.017-2.516 4.413-12.63-.987-26.32 0 0-8.296-2.672-27.202 10.204-7.912-2.213-16.371-3.308-24.784-3.352-8.414.044-16.872 1.14-24.785 3.352C52.457 19.558 44.162 22.23 44.162 22.23c-5.4 13.69-2.004 23.804-.987 26.32C36.824 55.498 33 64.378 33 75.233c0 38.204 23.149 46.603 45.2 49.067-3.551 3.071-6.719 9.138-6.719 18.41 0 6.416.03 22.621.059 27.29M27 130c9.939.703 15.67 9.735 15.67 9.735 8.834 15.199 23.178 10.803 28.815 8.265"
+            ></path>
+          </svg>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/marcus-marinelli-b1a10b1a0/"
+          target="_blank"
+          rel="noopener"
+          title="LinkedIn"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 20 20"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-180.000000, -7479.000000)"
+                fill="#000000"
+              >
+                <g id="icons" transform="translate(56.000000, 160.000000)">
+                  <path
+                    d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
+                    id="linkedin-[#161]"
+                    fill="currentColor"
+                  ></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="article">
+        <article>
+          <header class="article-header">
+            <a class="article-back" href="../blog.html">&larr; All articles</a>
+
+            <p class="article-kicker">
+              <time datetime="2024-11-07">7 Nov 2024</time>
+              <span>34 min read</span>
+            </p>
+
+            <h1>I built an Onchain App: Front-end - Part 1</h1>
+            <p class="article-lede">
+              Building the front end of a crowdfunding dApp with SvelteKit:
+              design decisions, routing, transitions and scroll animations.
+            </p>
+          </header>
+
+          <div class="article-body">
+            <p>
+              <em
+                >The code for the first stage of development explored in this
+                article can be found
+                <a
+                  href="https://github.com/MGM103/svelte5-onchain-app/tree/main/frontend-part-1"
+                  target="_blank"
+                  rel="noopener"
+                  >here</a
+                >. Please use this to provide additional context in the event
+                that any parts of this article are unclear. Additionally, if
+                aspects of this article are unclear or do not follow best
+                practices please let me know on
+                <a href="https://x.com/0xNelli" target="_blank" rel="noopener"
+                  >&#120143;</a
+                >.</em
+              >
+            </p>
+
+            <h2>Project Setup</h2>
+
+            <h3>SvelteKit Initialisation</h3>
+
+            <p>
+              As aforementioned in the previous article, I am using SvelteKit to
+              build out my frontend. It is important to note that while Svelte
+              recently announced the release of the latest version
+              <a
+                href="https://svelte.dev/blog/svelte-5-is-alive"
+                target="_blank"
+                rel="noopener"
+                >Svelte 5</a
+              >, I made this project before that and everything you see was done
+              using Svelte 4. Just giving you all the heads up that there will be
+              no runes here. Luckily Svelte 4 is backwards compatible with Svelte
+              5, so you can use the latest version and reap all the new
+              performance rewards without any consequences.
+            </p>
+
+            <p>
+              Step 1 of course is to create the project, which is easy enough
+              using the CLI:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Shell</figcaption>
+              <pre><code class="language-bash">npx sv create go-fund-yourself-fe
+cd go-fund-yourself-fe
+npm install
+npm run dev</code></pre>
+            </figure>
+
+            <p>
+              <em
+                >Please note that I am currently in the root directory of my
+                previously created
+                <a
+                  href="https://github.com/Cyfrin/foundry-fund-me-cu/tree/main"
+                  target="_blank"
+                  rel="noopener"
+                  >fundme_foundry</a
+                >
+                project.</em
+              >
+            </p>
+
+            <p>When prompted for initial setup options, I chose:</p>
+
+            <ol>
+              <li>Minimal template</li>
+              <li>no type checking</li>
+              <li>eslint &amp; prettier</li>
+              <li>npm</li>
+            </ol>
+
+            <h3>SCSS</h3>
+
+            <p>
+              Alrighty, so personally I am a sass preprocessor type of guy, as I
+              prefer to use SCSS to style components. A preprocessor extends the
+              capabilities of vanilla CSS and adds features such as variables,
+              nesting, mixins and functions.
+            </p>
+
+            <p>
+              If the above appeals to you, simply navigate to your
+              <code>svelte.config.js</code> file and make the following changes
+              to your imports and config:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>JavaScript</figcaption>
+              <pre><code class="language-javascript">import adapter from '@sveltejs/adapter-auto';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+  kit: {
+    adapter: adapter()
+  },
+  preprocess: [vitePreprocess()]
+};
+
+export default config;</code></pre>
+            </figure>
+
+            <p>
+              Additionally, in the <code>vite.config.js</code> file, the
+              following changes are required with
+              <a
+                href="https://sass-lang.com/documentation/breaking-changes/legacy-js-api/"
+                target="_blank"
+                rel="noopener"
+                >newer versions of sass</a
+              >:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>JavaScript</figcaption>
+              <pre><code class="language-javascript">import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [sveltekit()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler'
+      }
+    }
+  }
+});</code></pre>
+            </figure>
+
+            <h2>Design Philosophy</h2>
+
+            <p>Go Fund Yourself needs a homepage.</p>
+
+            <p>
+              This sounds simple enough, but while creating Go Fund Yourself I
+              discovered I have very little in the way of design skills. I
+              usually rely on professional designers to create great-looking
+              frontends in Figma and do my best to bring their vision to life.
+              Without this crutch, designing a website was initially quite an
+              intimidating proposition.
+            </p>
+
+            <p>
+              A few questions sprang to mind when attempting to develop a design.
+              What colours should be used? What fonts should be chosen? Should
+              animations be incorporated to make it feel more alive and modern?
+              How can Go Fund Yourself create a good first impression with new
+              users?
+            </p>
+
+            <p>Let's tackle these questions one at a time.</p>
+
+            <h3>Colour Scheme</h3>
+
+            <p>
+              I stumbled onto a great YouTuber by the name of
+              <a
+                href="https://www.youtube.com/@whosajid"
+                target="_blank"
+                rel="noopener"
+                >Sajid</a
+              >. He has great practical design advice oriented towards devs. His
+              video on
+              <a
+                href="https://www.youtube.com/watch?v=AmY3db_Qs94"
+                target="_blank"
+                rel="noopener"
+                >random design tips</a
+              >
+              starts with a guide on selecting colour palettes for a website and
+              he even provides a site to pick the 4 distinct
+              <code>HSL</code> values for you
+              <a
+                href="https://www.iamsajid.com/colors/"
+                target="_blank"
+                rel="noopener"
+                >here</a
+              >.
+            </p>
+
+            <p>These are the colour values I selected for Go Fund Yourself:</p>
+
+            <figure class="code-block">
+              <figcaption>SCSS</figcaption>
+              <pre><code class="language-scss">// Light mode colours
+$PRIMARY_LIGHT: hsl(220, 50%, 90%); 
+$SECONDARY_LIGHT: hsl(220, 50%, 10%); 
+$TERTIARY_LIGHT: hsl(280, 80%, 20%); 
+$ACCENT_LIGHT: hsl(160, 80%, 20%);
+
+// Dark mode colours
+$PRIMARY_DARK: hsl(220, 50%, 10%); 
+$SECONDARY_DARK: hsl(220, 50%, 90%); 
+$TERTIARY_DARK: hsl(280, 80%, 80%); 
+$ACCENT_DARK: hsl(160, 80%, 80%);</code></pre>
+            </figure>
+
+            <h3>Surfaces</h3>
+
+            <p>
+              Exploring style libraries to gain a better idea of how to bring a
+              professional-looking website alive, I encountered
+              <a
+                href="https://open-props.style/#getting-started"
+                target="_blank"
+                rel="noopener"
+                >Open Props</a
+              >. Open Props uses the idea of
+              <a
+                href="https://codepen.io/argyleink/pen/XWaYyWe"
+                target="_blank"
+                rel="noopener"
+                >surfaces</a
+              >:
+            </p>
+
+            <figure class="article-figure">
+              <img
+                src="../../assets/images/blog/open-props-surfaces.png"
+                alt="Layered surfaces with increasing elevation and shadows"
+                width="491"
+                height="499"
+                loading="lazy"
+              />
+              <figcaption>Open Props Surfaces</figcaption>
+            </figure>
+
+            <p>
+              This allows content to be layered in a manner that visually informs
+              the user of related content groupings. Each of the surfaces seen in
+              the image above also has a box shadow to give it a more tactile
+              feel and make the layering more apparent. Therefore shadow colour
+              values must also be incorporated into the design.
+            </p>
+
+            <p>
+              I opted to adapt this surface concept into the CSS of the app
+              rather than installing Open Props itself. I do not want to stand on
+              the shoulders of giants with this project, I want to create
+              everything from scratch and that means rawdogging the CSS in this
+              case.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>SCSS</figcaption>
+              <pre><code class="language-scss">// Light mode colours
+$LIGHT-SURFACE-1: hsl(220, 50%, 90%); 
+$LIGHT-SURFACE-2: hsl(220, 50%, 95%);
+$LIGHT-SURFACE-3: hsl(220, 50%, 100%);
+$LIGHT-SHADOW-1: hsla(220, 50%, 10%, 0.3);
+$LIGHT-SHADOW-2: hsla(220, 50%, 10%, 0.15);
+$SECONDARY-LIGHT: hsl(220, 50%, 10%); 
+$TERTIARY-LIGHT: hsl(280, 80%, 20%); 
+$ACCENT-LIGHT: hsl(160, 80%, 20%);
+
+// Dark mode colours
+$DARK-SURFACE-1: hsl(220, 50%, 10%); 
+$DARK-SURFACE-2: hsl(220, 50%, 15%); 
+$DARK-SURFACE-3: hsl(220, 50%, 20%); 
+$DARK-SHADOW-1: hsla(220, 50%, 90%, 0.3);
+$DARK-SHADOW-2: hsla(220, 50%, 90%, 0.15);
+$SECONDARY-DARK: hsl(220, 50%, 90%); 
+$TERTIARY-DARK: hsl(280, 80%, 80%); 
+$ACCENT-DARK: hsl(160, 80%, 80%);</code></pre>
+            </figure>
+
+            <h3>Fonts</h3>
+
+            <p>
+              Previously, I used Google Fonts for all my font needs. To no one's
+              surprise, Google fonts is a font server provided by Google, with a
+              plethora of fonts that can be added to your CSS.
+            </p>
+
+            <p>
+              However, recently I was made aware of
+              <a
+                href="https://fontsource.org/"
+                target="_blank"
+                rel="noopener"
+                >Fontsource</a
+              >. Fontsource allows you to self-host fonts in your project, this
+              provides a boost to performance as your app no longer needs to
+              communicate with the Google font server and increases privacy
+              compliance by also removing this interaction. I chose the
+              <code>Ubuntu sans-serif</code> font for Go Fund Yourself.
+            </p>
+
+            <p>You can add these fonts via the CLI:</p>
+
+            <figure class="code-block">
+              <figcaption>Shell</figcaption>
+              <pre><code class="language-bash">npm install @fontsource-variable/ubuntu-sans</code></pre>
+            </figure>
+
+            <h3>Main Style Sheet</h3>
+
+            <p>
+              Okay, now that we've made some key design decisions it's time to
+              put them into action. We will start by creating a
+              <code>main.scss</code> file within a new directory in the
+              <code>lib</code> directory called <code>styles</code>.
+            </p>
+
+            <p>
+              <em
+                >If you are not using a preprocessor you should just create a
+                <code>.css</code> file and adapt the content appropriately</em
+              >.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>SCSS</figcaption>
+              <pre><code class="language-scss">// src/lib/styles/main.scss
+
+@use '@fontsource-variable/ubuntu-sans';
+
+// Light mode colours
+$LIGHT-SURFACE-1: hsl(220, 50%, 90%);
+$LIGHT-SURFACE-2: hsl(220, 50%, 95%);
+$LIGHT-SURFACE-3: hsl(220, 50%, 100%);
+$LIGHT-SHADOW-1: hsla(220, 50%, 10%, 0.3);
+$LIGHT-SHADOW-2: hsla(220, 50%, 10%, 0.15);
+$SECONDARY-LIGHT: hsl(220, 50%, 10%);
+$TERTIARY-LIGHT: hsl(280, 80%, 20%);
+$ACCENT-LIGHT: hsl(160, 80%, 20%);
+$DISABLED-LIGHT: hsl(220, 50%, 35%);
+
+// Dark mode colours
+$DARK-SURFACE-1: hsl(220, 50%, 10%);
+$DARK-SURFACE-2: hsl(220, 50%, 15%);
+$DARK-SURFACE-3: hsl(220, 50%, 20%);
+$DARK-SHADOW-1: hsla(220, 50%, 90%, 0.3);
+$DARK-SHADOW-2: hsla(220, 50%, 90%, 0.15);
+$SECONDARY_DARK: hsl(220, 50%, 90%);
+$TERTIARY-DARK: hsl(280, 80%, 80%);
+$ACCENT-DARK: hsl(160, 80%, 80%);
+$DISABLED-DARK: hsl(220, 50%, 75%);
+
+:root {
+  --surface-1: #{$LIGHT-SURFACE-1};
+  --surface-2: #{$LIGHT-SURFACE-2};
+  --surface-3: #{$LIGHT-SURFACE-3};
+  --shadow-1: #{$LIGHT-SHADOW-1};
+  --shadow-2: #{$LIGHT-SHADOW-2};
+  --secondary: #{$SECONDARY-LIGHT};
+  --tertiary: #{$TERTIARY-LIGHT};
+  --accent: #{$ACCENT-LIGHT};
+  --disabled: #{$DISABLED-LIGHT};	
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-1: #{$DARK-SURFACE-1};
+    --surface-2: #{$DARK-SURFACE-2};
+    --surface-3: #{$DARK-SURFACE-3};
+    --shadow-1: #{$DARK-SHADOW-1};
+    --shadow-2: #{$DARK-SHADOW-2};
+    --secondary: #{$SECONDARY-DARK};
+    --tertiary: #{$TERTIARY-DARK};
+    --accent: #{$ACCENT-DARK};
+    --disabled: #{$DISABLED-DARK};
+  }
+}
+
+body {
+  background-color: var(--surface-1);
+  color: var(--secondary);
+  font-family: 'Ubuntu Sans Variable', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--accent);
+}</code></pre>
+            </figure>
+
+            <p>
+              Firstly, the font installed using <code>fontsource</code> was
+              imported with the <code>use</code> keyword. Next, all the colours
+              were declared as SCSS variables and a new colour was included for
+              disabled buttons and fields for both the light and dark themes. The
+              next two sections provide the scaffolding for theming changes to be
+              toggled in the future. Presently, the default colour palette is set
+              to light mode, however, when the user has dark mode enabled on
+              their browser the dark theme colour palette overrides these values.
+              Therefore by default, the theme of the website will be the same as
+              the theme used by the browser. The CSS variables declared in the
+              <code>:root</code> will be available to all our components as they
+              are made available globally through inheritance.
+            </p>
+
+            <p>
+              Then the background colour, font colour and font style are all set
+              in the <code>body</code>. Note <code>fontsource</code> will provide
+              instructions for the font you have installed, as my font was serif,
+              <code>sans-serif</code> is required in its declaration.
+            </p>
+
+            <p>
+              Finally, the height of the <code>html</code> and
+              <code>body</code> elements are set to <code>100%</code> to ensure
+              the app takes the full height of the screen. Additionally, list
+              styling and padding are removed by default for all
+              <code>ol</code> and <code>ul</code> elements. This is for
+              convenience, the nav bar and the footer components will use these
+              lists and we would have to remove the default styling in each
+              component, so it saves time removing globally. Also the colour
+              of hyperlinks is changed to better fit the theme we have selected.
+            </p>
+
+            <h2>SvelteKit Route Files</h2>
+
+            <p>
+              It is time to create the landing page. This page will go in the
+              <code>routes</code> directory, currently, there is one SvelteKit
+              route file <code>+page.svelte</code> in this directory. Route files
+              are marked with a <code>+</code> prefix in the file name. As
+              SvelteKit uses filesystem-based routing, this
+              <code>+page.svelte</code> file is the page that will load at the
+              root URL <code>http://localhost:5173/</code>.
+            </p>
+
+            <p>
+              SvelteKit also offers a <code>+layout.svelte</code> file, which
+              enables you to build a template to contain recurring elements
+              that remain present between different pages such as a navbar or
+              footer. Any good homepage will have a nav and a footer so let's
+              build out the <code>+layout.svelte</code> file.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+layout.svelte
+
+&lt;script&gt;
+  import '$lib/styles/main.scss';
+&lt;/script&gt;
+
+&lt;main&gt;
+  &lt;slot /&gt;
+&lt;/main&gt;</code></pre>
+            </figure>
+
+            <p>
+              The <code>+layout</code> file also acts as an entry point for the
+              <code>main.scss</code> file. Upon saving this you should notice the
+              styles we added come to life. Additionally, a
+              <code>main</code> tag was added to wrap the <code>slot</code>. This
+              is for
+              <a
+                href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide"
+                target="_blank"
+                rel="noopener"
+                >SEO</a
+              >
+              purposes. <code>slot</code> is the tag that tells the Svelte
+              compiler where the contents of the <code>+page.svelte</code> should
+              be inserted within the structure of the
+              <code>+layout.svelte</code> file.
+            </p>
+
+            <h2>Building the Landing Page</h2>
+
+            <h3>Nav bar</h3>
+
+            <p>
+              Now that the structure has been set it is time to start
+              constructing the various pieces that the landing page is composed
+              of, starting with the navbar. Navbars are on every page and look
+              simple enough, but are always more time-consuming than you think in
+              my experience. In any case, in the <code>routes</code> directory, a
+              <code>Navbar.svelte</code> file can be added.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/Navbar.svelte
+
+&lt;nav&gt;
+  &lt;h2&gt;&lt;a href="/"&gt;Go Fund Yourself&lt;/a&gt;&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="/fund-yourself"&gt;Fund yourself&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="/fund-someone"&gt;Fund someone&lt;/a&gt;&lt;/li&gt;
+      &lt;button&gt;connect&lt;/button&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+            </figure>
+
+            <p>
+              Okay, it is important to note that SvelteKit has no specialised
+              <code>link</code> component to change the route, it is all done via
+              the <code>a</code> tag. Therefore, clicking the logo will take you
+              to the home page or root URL <code>/</code>. Conversely, clicking
+              the two list items will take you to different pages, where you can
+              create and donate to different fund-raises respectively. Clicking
+              on these two links will result in a 404 error, but these pages will
+              be built later to fix this error. You can ignore it for now.
+            </p>
+
+            <p>
+              The navbar can now be added to the <code>+layout.svelte</code> file
+              so that it is rendered to the main page.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+layout.svelte
+
+&lt;script&gt;
+  import '$lib/styles/main.scss';
+  import Navbar from './Navbar.svelte';
+&lt;/script&gt;
+
+&lt;Navbar /&gt;
+&lt;main&gt;
+  &lt;slot /&gt;
+&lt;/main&gt;</code></pre>
+            </figure>
+
+            <p>
+              I think you'll agree that in its present state, the navbar looks
+              somewhere between plain and hideous, so let's add some CSS to change
+              that.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/Navbar.svelte
+
+&lt;nav&gt;
+  &lt;h2&gt;&lt;a id="nav-logo" href="/"&gt;Go Fund Yourself&lt;/a&gt;&lt;/h2&gt;
+    &lt;ul id="links-container"&gt;
+      &lt;li&gt;&lt;a href="/fund-yourself"&gt;Fund yourself&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="/fund-someone"&gt;Fund someone&lt;/a&gt;&lt;/li&gt;
+      &lt;button&gt;Connect&lt;/button&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+
+&lt;style scoped lang="scss"&gt;
+  nav {
+    align-items: center; 
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    margin-inline: auto;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+
+    #nav-logo {
+      display: block;
+      position: relative;
+      width: max-content;
+    }
+
+    ul {
+      align-items: center;
+      display: flex;
+      gap: 2rem;
+      position: relative;
+      width: 100%;
+    }
+    
+    button {
+      background-color: var(--tertiary);
+      border-radius: 6px;
+      border: none;
+      color: var(--surface-1);
+      cursor: pointer;
+      font-weight: 550;
+      margin-left: auto;
+      padding: 10px 12px;
+      width: 100px;
+    }
+  }
+&lt;/style&gt;</code></pre>
+            </figure>
+
+            <p>Further changes will be added to the navbar, but this will do for now.</p>
+
+            <h3>Footer</h3>
+
+            <p>
+              Footers are quite simple, as done with the navbar before it, a
+              <code>Footer.svelte</code> file was created in the
+              <code>routes</code> directory.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/Footer.svelte
+
+&lt;footer id="site-footer"&gt;
+  &lt;section id="top-row"&gt;
+    &lt;h2 class="h3"&gt;Go Fund Yourself&lt;/h2&gt;
+  &lt;/section&gt;
+  &lt;section id="bottom-row"&gt;
+    &lt;div id="funding-option"&gt;
+      &lt;h3 class="h6"&gt;Funding options&lt;/h3&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/fund-yourself"&gt;Start your own fund raise&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/fund-someone"&gt;Support another cause&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div id="about-creator"&gt;
+      &lt;ul&gt;
+    &lt;li&gt;Go Fund Yourself &amp;copy {new Date().getFullYear()}&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/footer&gt;
+
+&lt;style scoped lang="scss"&gt;
+  #site-footer {
+    color: var(--surface-1);
+    display: flex;
+    flex-direction: column;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    position: relative;
+    
+    #bottom-row {
+      display: flex;
+      flex-direction: row;
+      gap: 4rem;
+
+      #about-creator {
+    align-content: end;
+        
+        p {
+      margin-bottom: 4px;
+    }
+      }
+    }
+
+    li {
+      margin-bottom: 0.25rem;
+    }
+    
+    a {
+      color: var(--surface-1);
+      text-decoration: none;
+      
+      &amp;:hover {
+        color: var(--tertiary);
+      }
+    }
+
+    &amp;::before {
+      content: '';
+      background-color: var(--secondary);
+      height: 100%;
+      left: 50%;
+      position: absolute;
+      top: 0;  
+      transform: translateX(-50%);
+      width: 100vw;
+      z-index: -1;
+    }
+  }
+&lt;/style&gt;</code></pre>
+            </figure>
+
+            <p>
+              Perfect, this can now be imported into the
+              <code>+layout.svelte</code> file to complete the basic scaffolding
+              of our landing page. However, there is a noticeable issue:
+            </p>
+
+            <figure class="article-figure">
+              <img
+                src="../../assets/images/blog/homepage-before.png"
+                alt="Screenshot of the page with the footer floating in the middle of the viewport"
+                width="2877"
+                height="1566"
+                loading="lazy"
+              />
+            </figure>
+
+            <p>
+              The <code>+layout.svelte</code> file can be modified to ensure that
+              both the navbar and the footer are placed in their correct position
+              at the top and bottom of the page respectively.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+layout.svelte
+
+&lt;script&gt;
+  import '$lib/styles/main.scss';
+  import Navbar from './Navbar.svelte';
+  import Footer from './Footer.svelte';
+&lt;/script&gt;
+
+&lt;div class="container"&gt;
+  &lt;Navbar /&gt;
+  &lt;main&gt;
+    &lt;slot /&gt;
+  &lt;/main&gt;
+  &lt;Footer /&gt;
+&lt;/div&gt;
+
+&lt;style scoped lang="scss"&gt;
+  .container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
+    margin-inline: auto;
+    max-inline-size: 1080px;
+    padding-inline: 2rem;
+  }
+&lt;/style&gt;</code></pre>
+            </figure>
+
+            <p>Much better:</p>
+
+            <figure class="article-figure">
+              <img
+                src="../../assets/images/blog/homepage-after.png"
+                alt="Screenshot of the page with the navbar at the top and footer at the bottom"
+                width="2142"
+                height="1555"
+                loading="lazy"
+              />
+            </figure>
+
+            <h3>Landing Page Content</h3>
+
+            <p>
+              When I was creating this project I was learning vim motions on
+              <a
+                href="https://www.vimified.com/"
+                target="_blank"
+                rel="noopener"
+                >vimified</a
+              >. Not only did it help me learn the shortcuts for vim, but it was
+              also the inspiration for a simple yet effective landing page design.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+page.svelte
+
+&lt;div id="landing-container"&gt;
+  &lt;section id="landing-section"&gt;
+    &lt;h1&gt;Go&lt;/h1&gt;
+    &lt;h1&gt;Fund&lt;/h1&gt;
+    &lt;h1&gt;Yourself.&lt;/h1&gt;
+
+    &lt;div id="call-to-action"&gt;
+      &lt;button class="shadow-btn"&gt;Raise funds&lt;/button&gt;
+      &lt;p&gt;Harness the power of crowd-sourced fundraising today&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/div&gt;
+
+&lt;style scoped lang="scss"&gt;
+  #landing-section {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 60px;
+    padding: 2.5rem;
+    position: relative;
+
+    h1 {
+      font-size: 108px;
+      margin: 0;
+    }
+
+    #call-to-action {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;	
+    }
+  }
+&lt;/style&gt;</code></pre>
+            </figure>
+
+            <p>
+              You may have noticed that the class applied to the button is not
+              present in the style of the component. Buttons are a key part of
+              your application; they are dynamic elements and the element
+              users interact with to action their requests. As such I have
+              numerous different styles of buttons to convey the importance of
+              the button and give it life.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>SCSS</figcaption>
+              <pre><code class="language-scss">// src/lib/styles/_buttons.scss
+
+.connect-btn {
+  background-color: var(--tertiary);
+  border-radius: 6px;
+  border: none;
+  color: var(--surface-1);
+  cursor: pointer;
+  font-weight: 550;
+  padding: 10px 12px;
+  width: 100px;
+
+  &amp;:hover {
+    background-color: var(--tertiary);
+    transition: background-color 0.2s;
+  }
+}
+
+.connected-btn {
+  align-items: center;
+  background-color: transparent;
+  border-radius: 6px;
+  border: none;
+  color: var(--secondary);
+  cursor: pointer;
+  display: flex;
+  font-weight: 550;
+  gap: 1rem;
+  justify-content: center;
+  padding: 0.75rem;
+  width: min-content;
+
+  img,
+  svg {
+    max-height: 20px;
+    max-width: 20px;
+  }
+
+  @media (max-width: 680px) {
+    padding: 0.25rem;
+  }
+}
+
+.shadow-btn {
+  background-color: var(--tertiary);
+  border-radius: 8px;
+  border: none;
+  color: var(--surface-1);
+  cursor: pointer;
+  font-weight: 550;
+  min-width: 100px;
+  padding: 12px;
+
+  &amp;:hover {
+    box-shadow: 0px 0px 16px var(--tertiary);
+  }
+}
+
+.power-btn {
+  align-items: center;
+  background-color: var(--surface-2);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: 0 2px var(--accent);
+  color: var(--secondary);
+  cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+  padding: 12px 20px;
+  
+  &amp;:hover {
+    box-shadow: 0 4px var(--accent);
+  }
+
+  &amp;:disabled {
+    border: 1px solid var(--tertiary);
+    box-shadow: 0 2px var(--tertiary);
+  }
+
+  img,
+  svg {
+    max-height: 16px;
+    max-width: 16px;
+  }
+}
+
+.table-filter-btn {
+  background-color: transparent;
+  border: none;
+  color: var(--secondary);
+  cursor: pointer;
+  font-size: 14px;
+
+  &amp;:hover {
+    border-bottom: 2px solid var(--tertiary);
+    margin-bottom: -2px;
+  }
+}
+
+.pagination-btn {
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--secondary);
+  display: flex;
+  font-size: 14px;
+  gap: 0.5rem;
+  padding: 12px;
+
+  &amp;:hover:not(:disabled) {
+    border-radius: 8px;
+    border: 1px solid var(--secondary);
+    cursor: pointer;
+  }
+
+  &amp;:disabled {
+    color: var(--disabled);
+  }
+
+  img,
+  svg {
+    max-height: 1rem;
+    max-width: 1rem;
+  }
+}
+
+.back-btn {
+  align-items: center;
+  background-color: transparent;
+  color: var(--secondary);
+  display: flex;
+  font-size: 14px;
+  gap: 0.25rem;
+  padding: 12px;
+  text-decoration: none;
+
+  &amp;:hover:not(:disabled) {
+    text-decoration: underline;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  img,
+  svg {
+    max-height: 0.65rem;
+    max-width: 0.65rem;
+  }
+}
+
+.cancel-btn {
+  background-color: transparent;
+  border: 1px solid var(--secondary);
+  border-radius: 8px;
+  color: var(--secondary);
+  cursor: pointer;
+  padding: 0.75rem;
+
+  &amp;:hover {
+    background-color: var(--surface-1);
+  }
+}
+
+.max-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+
+  &amp;:hover {
+    text-decoration: underline;
+  }
+}</code></pre>
+            </figure>
+
+            <p>
+              Importing these buttons into the <code>main.scss</code> will enable
+              these classes to be used throughout the app.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>SCSS</figcaption>
+              <pre><code class="language-scss">// src/lib/styles/main.scss
+
+@use 'buttons';
+
+...</code></pre>
+            </figure>
+
+            <h3>Animations… erm I mean transitions</h3>
+
+            <p>
+              Svelte has a fantastic offering of
+              <a
+                href="https://svelte.dev/docs/svelte/transition"
+                target="_blank"
+                rel="noopener"
+                >transitions</a
+              >
+              to add life to different elements as they are added and removed to
+              the DOM. A fade transition to the newly added
+              <code>+page.svelte</code> content gives it more life and makes the
+              user's entrance to the site feel more grandiose.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+page.svelte
+
+&lt;script&gt;
+  import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
+
+  // STATE VARS
+  let landingPageVisible = false;
+
+  // LIFECYCLE LOGIC
+  onMount(() =&gt; {
+    landingPageVisible = true;
+    window.scrollTo(0, 0);
+  });
+&lt;/script&gt;
+
+&lt;div id="landing-container"&gt;
+  &lt;section id="landing-section"&gt;
+    {#if landingPageVisible}
+      &lt;h1 in:fade={{ delay: 100, duration: 1000 }}&gt;Go&lt;/h1&gt;
+      &lt;h1 in:fade={{ delay: 800, duration: 1000 }}&gt;Fund&lt;/h1&gt;
+      &lt;h1 in:fade={{ delay: 1500, duration: 1000 }}&gt;Yourself.&lt;/h1&gt;
+
+      &lt;button 
+        in:fade={{ delay: 2200, duration: 1000 }} 
+        class="shadow-btn"
+      &gt;Raise funds&lt;/button&gt;
+      &lt;p&gt;Harness the power of crowd-sourced fundraising today&lt;/p&gt;
+    {/if}
+  &lt;/section&gt;
+&lt;/div&gt;</code></pre>
+            </figure>
+
+            <p>
+              <code>fade</code> comes from the
+              <code>svelte/transitions</code> module, but it is possible to
+              build
+              <a
+                href="https://svelte.dev/docs/svelte/transition#Custom-transition-functions"
+                target="_blank"
+                rel="noopener"
+                >custom transitions</a
+              >, that uses JavaScript or CSS to provide the animation behaviour.
+              This article
+              <a
+                href="https://css-tricks.com/making-your-first-custom-svelte-transition/"
+                target="_blank"
+                rel="noopener"
+                >here</a
+              >
+              explains custom transitions in depth.
+            </p>
+
+            <p>The API for a custom transition is detailed below:</p>
+
+            <figure class="code-block">
+              <figcaption>JavaScript</figcaption>
+              <pre><code class="language-javascript">transition = (node: HTMLElement, params: any, options: { direction: 'in' | 'out' | 'both' }) =&gt; {
+    delay?: number,
+    duration?: number,
+    easing?: (t: number) =&gt; number,
+    css?: (t: number, u: number) =&gt; string,
+    tick?: (t: number, u: number) =&gt; void
+}</code></pre>
+            </figure>
+
+            <p>A transition is a function that has the following properties</p>
+
+            <ul>
+              <li>
+                Takes a parameter <code>node</code>, which is an HTML element to
+                which the transition will be applied.
+              </li>
+              <li>
+                Can optionally provide options for each stage of the
+                transition, <code>in</code> when the element is being rendered,
+                <code>out</code> when the component is being removed or
+                <code>both</code> which encapsulates the previous two stages.
+              </li>
+              <li>
+                Optionally returns a <code>delay</code>, time in ms before
+                transition runs.
+              </li>
+              <li>
+                Optionally returns a <code>duration</code>, the time in ms the
+                transition will take to complete.
+              </li>
+              <li>
+                Optionally returns <code>easing</code>, the rate of change of the
+                transition within the duration it runs. E.g. does the animation
+                take linear time to complete or speed up or slow down throughout
+                the duration it runs.
+              </li>
+              <li>
+                Must return either a <code>css</code> or
+                <code>tick</code> callback that is the transition that will be
+                applied to the element.
+              </li>
+            </ul>
+
+            <p>Here is an example of a custom transition used in Go Fund Yourself:</p>
+
+            <figure class="code-block">
+              <figcaption>JavaScript</figcaption>
+              <pre><code class="language-javascript">// src/lib/animationsAndTransitions/typewriter.js
+
+export default function typewriter(node, { delay = 0, speed = 2 }) {
+  const valid = node.childNodes.length === 1 &amp;&amp; node.childNodes[0].nodeType === Node.TEXT_NODE;
+
+  if (!valid) {
+    throw new Error(`This transition only works on elements with a single text node child`);
+  }
+
+  const text = node.textContent;
+  const duration = text.length / (speed * 0.01);
+
+  return {
+    delay,
+    duration,
+    tick: (t) =&gt; {
+      const i = Math.trunc(text.length * t);
+      node.textContent = text.slice(0, i);
+    }
+  };
+}</code></pre>
+            </figure>
+
+            <p>The transition above does the following:</p>
+
+            <ul>
+              <li>
+                It checks that the HTML element only contains text to which the
+                typewriter effect will be applied and throws an error if this is
+                not fulfilled.
+              </li>
+              <li>
+                Stores the pure text in the var <code>text</code>
+              </li>
+              <li>
+                Calculates duration based on the text length, the
+                <code>speed</code> parameter which is defaulted to 2.
+              </li>
+              <li>
+                Defines a JavaScript function for the effect. The
+                <code>t</code> value increases from 0 to 1 over the duration of
+                the transition, as this value increases, more characters are
+                added to the string slice, giving the effect that the characters
+                are being typed out.
+              </li>
+            </ul>
+
+            <p>
+              This can now be added to the call to action text below the button
+              on the landing page on <code>+page.svelte</code> in the
+              <code>routes</code> directory:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+page.svelte
+
+...
+
+&lt;div id="landing-container"&gt;
+  &lt;section id="landing-section"&gt;
+    {#if landingPageVisible}
+      &lt;h1 in:fade={{ delay: 100, duration: 1000 }}&gt;Go&lt;/h1&gt;
+      &lt;h1 in:fade={{ delay: 800, duration: 1000 }}&gt;Fund&lt;/h1&gt;
+      &lt;h1 in:fade={{ delay: 1500, duration: 1000 }}&gt;Yourself.&lt;/h1&gt;
+
+      &lt;button in:fade={{ delay: 2200, duration: 1000 }} class="shadow-btn"&gt;Raise funds&lt;/button&gt;
+      &lt;p in:typewriter={{ speed: 2, delay: 2250 }}&gt;
+    Harness the power of crowd-sourced fundraising today
+      &lt;/p&gt;
+    {/if}
+  &lt;/section&gt;
+&lt;/div&gt;
+
+...</code></pre>
+            </figure>
+
+            <h2>Finishing the Homepage</h2>
+
+            <h3>Promotional content</h3>
+
+            <p>
+              Now that there is a compelling and professional landing area for
+              the user when they first visit the site, it is time to complete the
+              rest of the landing page. To complete this page, additional
+              promotional content with call-to-action buttons was added. This
+              will provide an explanation of the core offerings of the platform
+              with immediate access points to these offerings. With the
+              additional material added, the landing page code now looks as
+              follows:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">&lt;script&gt;
+  import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
+  import { typewriter } from '$lib';
+  import { AidSVG, AnonymousSVG, ChainsSVG, GlobeSVG } from '$lib/assets';
+
+  // STATE VARS
+  let landingPageVisible = false;
+  
+  // LIFECYCLE LOGIC
+  onMount(() =&gt; {
+    landingPageVisible = true;
+    window.scrollTo(0, 0);
+  });
+&lt;/script&gt;
+
+&lt;div id="landing-container"&gt;
+  &lt;section id="landing-section"&gt;
+    {#if landingPageVisible}
+      &lt;h1 in:fade={{ delay: 100, duration: 1000 }}&gt;Go&lt;/h1&gt;
+      &lt;h1 in:fade={{ delay: 800, duration: 1000 }}&gt;Fund&lt;/h1&gt;
+      &lt;h1 in:fade={{ delay: 1500, duration: 1000 }}&gt;Yourself.&lt;/h1&gt;
+
+      &lt;button in:fade={{ delay: 2200, duration: 1000 }} class="shadow-btn"&gt;Raise funds&lt;/button&gt;
+      &lt;p in:typewriter={{ delay: 2200 }}&gt;Harness the power of crowd-sourced fundraising today&lt;/p&gt;
+    {/if}
+  &lt;/section&gt;
+  &lt;section class="promo-section"&gt;
+    &lt;div class="promo-container" transition:fade&gt;
+      &lt;div class="promo-card card"&gt;
+        &lt;h2&gt;Raise funds for a special cause&lt;/h2&gt;
+        &lt;p&gt;
+          This platform allows you to leverage the power of smart contracts on the blockchain to raise funds for any type of cause near and dear to your heart in a decentralised and permissionless manner.
+        &lt;/p&gt;
+        &lt;p&gt;
+          This means that Go Fund Yourself facilitates fundraising that is censorship resistant and global in its outreach. No one can take down your fundraising initiative and anyone with an internet connection can contribute to your cause.
+        &lt;/p&gt;
+        &lt;p&gt;Get started raising today.&lt;/p&gt;
+        &lt;button 
+          class="shadow-btn" 
+          on:click={() =&gt; goto('/fund-yourself')}
+        &gt;Fund yourself&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="promo-icon-container"&gt;
+        &lt;div class="promo-icon-card card"&gt;
+      &lt;GlobeSVG /&gt;
+      &lt;p&gt;Raise globally&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="promo-icon-card card"&gt;
+      &lt;ChainsSVG /&gt;
+      &lt;p&gt;Raise without censorship&lt;/p&gt;
+    &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+  &lt;section class="promo-section"&gt;
+    &lt;div class="promo-container"&gt;
+      &lt;div class="promo-card card"&gt;
+        &lt;h2&gt;Donate to initiatives around the world&lt;/h2&gt;
+    &lt;p&gt;
+      Donate to unique initiatives around the globe and aid different communities and people to help them achieve their goals.
+        &lt;/p&gt;
+    &lt;p&gt;
+      Being built on top of blockchain technology donations are pseudo-anonymous by default. So you can donate to different causes with peace of mind that your identity is not broadcast every time you make a donation.
+    &lt;/p&gt;
+    &lt;p&gt;Get started donating today.&lt;/p&gt;
+    &lt;button 
+          class="shadow-btn" 
+          on:click={() =&gt; goto('/fund-someone')}
+        &gt;Fund someone&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="promo-icon-container"&gt;
+        &lt;div class="promo-icon-card card"&gt;
+      &lt;AidSVG /&gt;
+      &lt;p&gt;Aid communities across the world&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="promo-icon-card card"&gt;
+      &lt;AnonymousSVG /&gt;
+      &lt;p&gt;Pseudo-anonymous donations by default&lt;/p&gt;
+    &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/div&gt;
+
+&lt;style scoped lang="scss"&gt;
+  #landing-section {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    justify-content: center;
+    margin-top: 60px;
+    padding: 2.5rem;
+    position: relative;
+
+    h1 {
+      font-size: 108px;
+      margin: 0;
+    }
+
+    button {
+      margin-top: 5rem;
+    }
+
+    p {
+      margin-bottom: 0;
+      margin-top: 1rem;
+    }
+  }
+
+  .promo-section {
+    min-height: max-content;
+    padding-block: 5rem;
+    position: relative;
+  }
+
+  .card {
+    background-color: var(--surface-2);
+    border-radius: 20px;
+    border-top: 4px solid var(--accent);
+    box-shadow:
+      0 2px 2px var(--shadow-1),
+      0 4px 4px var(--shadow-2);
+    padding: 2rem;
+  }
+
+  .promo-container {
+    display: flex;
+    gap: 2.5rem;
+
+    .promo-card {
+      flex: 1;
+
+      button {
+    margin: 1rem 0;
+      }
+    }
+
+    .promo-icon-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .promo-icon-card {
+        align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: auto;
+    justify-content: center;
+    padding: 1rem;
+
+    p {
+      font-weight: 500;
+      margin-bottom: 0;
+      max-width: 155px;
+      text-align: center;
+    }
+
+    img {
+      border-radius: 50%;
+      max-height: 100px;
+      max-width: 100px;
+    }
+      }
+    }
+  }
+&lt;/style&gt;</code></pre>
+            </figure>
+
+            <p>
+              <em
+                >Please refer to this
+                <a
+                  href="https://github.com/MGM103/svelte5-onchain-app/tree/main/frontend-part-1/src/lib/assets"
+                  target="_blank"
+                  rel="noopener"
+                  >link</a
+                >
+                for the code for SVG components that were added.</em
+              >
+            </p>
+
+            <p>
+              Okay, the content for the homepage is finished. However, just as
+              was done for the landing section, animations can be added to the
+              new content. To keep the UI decluttered and draw the user's
+              attention to the latest information, fade animations on scroll can
+              be applied to the new content cards to fade in when visible and
+              fade out when hidden.
+            </p>
+
+            <h3>Intersection Observer</h3>
+
+            <p>
+              How does one know when an element has scrolled into/out of view of
+              the user? Fortunately, there is an established API supported by the
+              major browsers that fulfils this purpose, the
+              <a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#a_simple_example"
+                target="_blank"
+                rel="noopener"
+                >intersection observer API</a
+              >.
+            </p>
+
+            <p>
+              It is quite easy to work with this API, simply put by the MDN docs:
+            </p>
+
+            <blockquote>
+              <p>
+                The Intersection Observer API allows you to configure a callback
+                that is called when either of these circumstances occur:
+              </p>
+
+              <ul>
+                <li>
+                  A <strong>target</strong> element intersects either the
+                  device's viewport or a specified element.
+                </li>
+                <li>
+                  The first time the observer is initially asked to watch a
+                  target element.
+                </li>
+              </ul>
+            </blockquote>
+
+            <p>
+              With this knowledge, intersection observers can be set up for both
+              the fundraising and donation promotional sections. A state
+              variable for each of these sections will be added,
+              <code>fundRaisingPromoVisible</code> and
+              <code>donationPromoVisible</code>. These will initially be set to
+              <code>false</code> and the class <code>promo-section</code> shared
+              by the promo content will set the <code>opacity</code> to 0,
+              ensuring the content is hidden initially.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+page.svelte
+
+...
+
+// STATE VARS
+let landingPageVisible = false;
+let fundRaisingPromoVisible = false;
+let donationPromoVisible = false;
+
+...
+
+&lt;style scoped lang="scss"&gt;
+  ...
+
+  .promo-section {
+    height: max-content;
+    opacity: 0;
+    padding-block: 5rem;
+    position: relative;
+  }
+
+  ...
+&lt;/style&gt;</code></pre>
+            </figure>
+
+            <p>
+              These observers will fire a callback function when the element is
+              40% viewable and will set the viewable state variable to true,
+              triggering the fade-in animation on scroll. Conversely, when the
+              element is not 40% viewable the callback should fire again setting
+              the visible state variable to <code>false</code>.
+            </p>
+
+            <p>
+              To create an intersection observer requires calling the observer's
+              constructor passing it the aforementioned callback and some
+              initialisation options that dictate the type of intersection the
+              observer is monitoring.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>JavaScript</figcaption>
+              <pre><code class="language-javascript">const observerOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: [0, 0.2, 0.4, 0.6, 0.8, 1]
+};</code></pre>
+            </figure>
+
+            <p>
+              These are the options passed to the observer constructor on the
+              <code>+page.svelte</code>. The <code>root</code> refers to the
+              element that is being intersected with or that is used to measure
+              the visibility of the target element. If left
+              <code>null</code> the root becomes the viewport itself or the
+              content viewable on the screen by the user.
+              <code>rootMargin</code> allows a margin around the root element to be
+              added to expand or contract the viewable area of the target
+              element. Finally, <code>threshold</code> is the ratio of the
+              visibility of the target element against the root element. If an
+              element is half viewable its threshold value is
+              <code>0.5</code> if fully viewable <code>1</code> and if hidden
+              <code>0</code>. By providing an array of values for the
+              <code>threshold</code>, the observer is able to update the
+              visibility of the target element between the ticks of the provided
+              threshold. In this case increments of 20%. For a practical
+              demonstration of thresholds please refer to the
+              <a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#intersection_observer_concepts_and_usage"
+                target="_blank"
+                rel="noopener"
+                >MDN playground example</a
+              >
+              in this article.
+            </p>
+
+            <p>
+              To instantiate an intersection observer is quite simple:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>JavaScript</figcaption>
+              <pre><code class="language-javascript">const observer = new IntersectionObserver(callback, options);</code></pre>
+            </figure>
+
+            <p>
+              The options are ready, time to create the callback functions. Now
+              as aforementioned, the goal of these callback functions is to set
+              the visibility state variables of the content to
+              <code>true</code> when 40% visible and false when less than 40%
+              visible. This looks as follows:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+page.svelte
+
+...
+
+const showFundRaisingPromo = (entries) =&gt; {
+  const [entry] = entries;
+
+  if(entry.intersectionRatio &gt;= 0.4) {
+    fundRaisingPromoVisible = true;
+  } else {
+    fundRaisingPromoVisible = false;
+  }
+}
+
+const renderDonationPromo = (entries) =&gt; {
+  const [entry] = entries;
+
+  if (entry.intersectionRatio &gt;= 0.4) {
+    donationPromoVisible = true;
+  } else {
+    donationPromoVisible = false;
+  }
+};</code></pre>
+            </figure>
+
+            <p>
+              Intersection observer callbacks have an argument
+              <code>entries</code> that contains a multitude of data about the
+              intersection details of the target element. You can read more
+              about this
+              <a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry"
+                target="_blank"
+                rel="noopener"
+                >here</a
+              >.
+            </p>
+
+            <p>
+              <code>intersectionRatio</code> is the ratio of the target element's
+              visibility against the root element. For example, if the root
+              element was the viewport and half the target element was visible,
+              the intersection ratio would be 0.5.
+            </p>
+
+            <p>
+              Now that the callbacks are prepared it is time to create the
+              intersection observers to monitor the two content sections. These
+              observers will be created in the <code>onMount</code> portion of
+              the <code>+page.svelte</code>.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+page.svelte
+
+...
+
+// STATE VARS
+let landingPageVisible = false;
+let fundRaisingPromoVisible = false;
+let donationPromoVisible = false;
+let fundRaisingContainer;
+let donationContainer;
+
+// LIFECYCLE LOGIC
+onMount(() =&gt; {
+  landingPageVisible = true;
+  window.scrollTo(0, 0);
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: [0, 0.2, 0.4, 0.6, 0.8, 1]
+  };
+
+  const fundRaisingPromoObserver = new IntersectionObserver(
+    renderFundRaisingPromo,
+    observerOptions
+  );
+
+  const donationPromoObserver = new IntersectionObserver(
+    renderDonationPromo, 
+    observerOptions
+  );
+
+  fundRaisingPromoObserver.observe(fundRaisingContainer);
+  donationPromoObserver.observe(donationContainer);
+
+  return () =&gt; {
+    fundRaisingPromoObserver.unobserve(fundRaisingContainer);
+    donationPromoObserver.unobserve(donationContainer);
+
+    fundRaisingPromoObserver.disconnect();
+    donationPromoObserver.disconnect();
+  };
+});
+
+// UTILITY FUNCTIONS
+const renderFundRaisingPromo = (entries) =&gt; {
+  const [entry] = entries;
+
+  if (entry.intersectionRatio &gt;= 0.4) {
+    fundRaisingPromoVisible = true;
+    console.log('Fund-raising promo is visible');
+  } else {
+    fundRaisingPromoVisible = false;
+    console.log('Fund-raising promo is not visible');
+  }
+};
+
+const renderDonationPromo = (entries) =&gt; {
+  const [entry] = entries;
+
+  if (entry.intersectionRatio &gt;= 0.4) {
+    donationPromoVisible = true;
+    console.log('Donation promo is visible');
+  } else {
+    donationPromoVisible = false;
+    console.log('Donation promo is not visible');
+  }
+};</code></pre>
+            </figure>
+
+            <p>
+              In Svelte you can use <code>bind:this</code> on an HTML element to
+              have a reference to this element in the JavaScript code. That is
+              what's done for the <code>fundRaisingContainer</code> and
+              <code>donationContainer</code> variables. The markup for these
+              elements looks as follows:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+page.svelte
+
+&lt;section bind:this={fundRaisingContainer}&gt;
+  ...
+&lt;/section&gt;
+&lt;section bind:this={donationContainer}&gt;
+  ...
+&lt;/section&gt;</code></pre>
+            </figure>
+
+            <p>
+              Continuing with the setup of the observers, it can be seen that the
+              observer options are defined and then the observers are created
+              using the callbacks and the observer options as seen below:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>JavaScript</figcaption>
+              <pre><code class="language-javascript">const fundRaisingPromoObserver = new IntersectionObserver(
+    renderFundRaisingPromo,
+    observerOptions
+ );
+
+ const donationPromoObserver = new IntersectionObserver(
+   renderDonationPromo, 
+   observerOptions
+ );</code></pre>
+            </figure>
+
+            <p>Next, the observers need to be assigned a target element to observe:</p>
+
+            <figure class="code-block">
+              <figcaption>JavaScript</figcaption>
+              <pre><code class="language-javascript">fundRaisingPromoObserver.observe(fundRaisingContainer);
+donationPromoObserver.observe(donationContainer);</code></pre>
+            </figure>
+
+            <p>
+              Finally, the observers should be cleaned up and removed when
+              leaving the homepage. The <code>onMount</code> lifecycle hook will
+              run any function returned from the lifecycle hook. Therefore, the
+              observer cleanup code can be written here:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">return () =&gt; {
+  // Halt observing html elements
+  fundRaisingPromoObserver.unobserve(fundRaisingContainer);
+  donationPromoObserver.unobserve(donationContainer);
+
+  // Close the intersection observers
+  fundRaisingPromoObserver.disconnect();
+  donationPromoObserver.disconnect();
+};</code></pre>
+            </figure>
+
+            <p>
+              As can be observed from the console, the observers are functioning
+              correctly. They fire the callbacks and update the state variables
+              when the scroll changes and content visibility is updated. The
+              final step is to create animations for these observers to trigger
+              to complete the homepage.
+            </p>
+
+            <h3>Animations on scroll</h3>
+
+            <p>To implement this functionality, CSS keyframes and animations can be used:</p>
+
+            <figure class="code-block">
+              <figcaption>SCSS</figcaption>
+              <pre><code class="language-scss">// src/lib/animationsAndTransitions/fade.scss
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.75s ease-in forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s ease-in forwards;
+}</code></pre>
+            </figure>
+
+            <p>
+              This file was added to the previously created
+              <code>animationsAndTransitions</code> directory. The
+              <code>@keyframes</code> rule allows animations to be generated by
+              specifying how the style of an element should change over time.
+              Here we change <code>opacity</code> from 0 to 1 or vice versa. This
+              creates the animation of a fade-in/out. Once these changes are
+              defined, they can be applied using the
+              <code>animation</code> property. The
+              <code>fade-in</code> and <code>fade-out</code> classes will apply
+              the keyframes to HTML elements that possess the class. The
+              <code>animation</code> property includes several parameters.
+              Examining the <code>fade-in</code> class:
+            </p>
+
+            <ul>
+              <li>
+                First is the name of the <code>@keyframes</code> animation to
+                use. <code>fadeIn</code> in this case.
+              </li>
+              <li>
+                Second is the amount of time to complete one cycle of the
+                animation. This is 0.75s above.
+              </li>
+              <li>
+                Next is <code>animation-timing-function</code>, which defines the
+                rate of change of the animation. E.g. linear, ease-in, etc.
+                <code>ease-in</code> is used to start the animation slowly and
+                then gradually speed up.
+              </li>
+              <li>
+                Finally, <code>animation-direction</code> controls whether the
+                animation plays forward, backward or alternates.
+                <code>forward</code> was used above to play the animation from 0%
+                to 100% and retain the final style of the element.
+              </li>
+            </ul>
+
+            <p>
+              The complete list of parameters can be found
+              <a
+                href="https://www.w3schools.com/cssref/css3_pr_animation.php"
+                target="_blank"
+                rel="noopener"
+                >here</a
+              >.
+            </p>
+
+            <p>
+              Next, we need to import these animations into the
+              <code>main.scss</code> file using the <code>use</code> keyword to
+              ensure that these new animation classes are available in all the
+              Svelte components.
+            </p>
+
+            <figure class="code-block">
+              <figcaption>SCSS</figcaption>
+              <pre><code class="language-scss">// src/lib/styles/main.scss
+
+@use 'buttons';
+@use '@fontsource-variable/ubuntu-sans';
+@use '../animationsAndTransitions/fade.scss';
+
+...</code></pre>
+            </figure>
+
+            <p>
+              Next, these classes can be applied to the new content in
+              <code>+page.svelte</code>:
+            </p>
+
+            <figure class="code-block">
+              <figcaption>Svelte</figcaption>
+              <pre><code class="language-markup">// src/routes/+page.svelte
+
+...
+
+&lt;section
+  bind:this={fundRaisingContainer}
+  class={`promo-section ${fundRaisingPromoVisible ? 'fade-in' : 'fade-out'}`}
+&gt;
+  ...		
+&lt;/section&gt;
+&lt;section
+  class={`promo-section ${donationPromoVisible ? 'fade-in' : 'fade-out'}`}
+  bind:this={donationContainer}
+&gt;
+  ...
+&lt;/section&gt;</code></pre>
+            </figure>
+
+            <p>And voilà a simple yet modern and interactive landing page.</p>
+
+            <p>
+              Please refer to the
+              <a
+                href="https://github.com/MGM103/svelte5-onchain-app/tree/main/frontend-part-1"
+                target="_blank"
+                rel="noopener"
+                >GitHub repo</a
+              >
+              for the full source code of the completed part 1 code.
+            </p>
+
+            <h3>Transitions vs CSS animations with keyframes</h3>
+
+            <p>
+              You may be wondering why CSS animations were used on the content
+              sections as opposed to Svelte transitions, which were used on the
+              landing section. This is a fair point to wonder and I want to
+              explain my rationale behind this choice.
+            </p>
+
+            <p>
+              Firstly, recall that Svelte transitions can only be applied to an
+              element when it is entering or leaving the DOM as a result of a
+              state change. This is trivial to set up, there are already
+              visibility state variables for each of the content sections. The
+              content within the <code>&lt;section&gt;</code> tags could be
+              wrapped in a conditional template
+              <code>{#if isVisible} … {/if}</code> and then transitions could be
+              applied to the content. However, the height of the content sections
+              (<code>.promo-section</code>) is: <code>max-content</code>. This
+              presents an issue with the intersection observer. If the content is
+              not yet rendered because it is not visible, then the section has no
+              content and its height is zero. This means the observer can never
+              observe it intersecting with the viewport, as having a height of
+              zero effectively makes the element invisible. Therefore, the
+              visibility state variable will never be updated and the content
+              will never show.
+            </p>
+
+            <p>
+              Of course, it is possible to specify a
+              <code>min-height</code> to be a portion of the
+              <code>vh</code> as done with the landing section, however, I did not
+              wish to do that. I wanted the height of the container to
+              accommodate only the amount of space required. This is why I used
+              keyframes and animations. The intersection observer could update
+              state variables which would modify the class applied to the content
+              creating the same effect. However, this approach ensures there's no
+              popping or excessive space taken for content on the page, creating
+              the best user experience.
+            </p>
+
+            <h2>Wrapping up</h2>
+
+            <p>
+              I would like to reiterate that all code from this section can be
+              found
+              <a
+                href="https://github.com/MGM103/svelte5-onchain-app/tree/main/frontend-part-1"
+                target="_blank"
+                rel="noopener"
+                >here</a
+              >. This article explored and discussed a number of topics:
+            </p>
+
+            <ul>
+              <li>SvelteKit Project Setup</li>
+              <li>The UI Design Philosophy</li>
+              <li>SvelteKit Route Files</li>
+              <li>Svelte Transitions</li>
+              <li>Intersection Observers</li>
+              <li>CSS Keyframes and Animations</li>
+            </ul>
+
+            <p>
+              At the conclusion of this article, a modern homepage has been built
+              and the foundation has been laid to create other components and
+              pages, as well as implementing features such as toggling between
+              light and dark themes.
+            </p>
+
+            <p>
+              The next instalment will explore these topics and should be out
+              shortly.
+            </p>
+
+            <p>
+              If you found this article helpful please subscribe for
+              notifications about future articles and mint to show you support!
+            </p>
+
+            <p>See you in the next one&#128075;</p>
+          </div>
+
+          <footer class="article-footer">
+            <a href="../blog.html">&larr; Back to all articles</a>
+            <a
+              href="https://paragraph.com/@0xnelli/i-built-an-onchain-app-front-end-part-1"
+              target="_blank"
+              rel="noopener"
+              >Original on Paragraph</a
+            >
+          </footer>
+        </article>
+
+        <footer>
+          <span class="copyright">&copy; 2026 Marcus Marinelli</span>
+          <a href="mailto:marcus.marinelli3@gmail.com">Contact me</a>
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>

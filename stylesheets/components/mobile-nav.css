@@ -117,6 +117,21 @@
 			outline: 2px solid var(--color-tertiary);
 			outline-offset: 2px;
 		}
+
+		/* The row for the page you are on: a dot takes the place of the
+		   external-link arrow at the far edge. */
+		&[aria-current="page"] {
+			color: var(--color-tertiary);
+
+			&::after {
+				background-color: currentColor;
+				content: "";
+				flex: 0 0 auto;
+				height: 0.4rem;
+				margin-left: 1rem;
+				width: 0.4rem;
+			}
+		}
 	}
 }
 

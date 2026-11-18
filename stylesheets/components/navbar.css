@@ -3,10 +3,10 @@ body > header {
 	background-color: var(--color-primary);
 	display: flex;
 	justify-content: space-between;
-	height: calc(var(--header-height) - 0.5rem);
+	height: var(--header-height);
 	left: 0;
 	padding-top: 0.75rem;
-	padding-bottom: 0.25rem;
+	padding-bottom: 0;
 	padding-inline: var(--page-padding);
 	position: fixed;
 	top: 0;
@@ -105,9 +105,54 @@ body > header {
 		}
 	}
 
+	/* Primary page links sit beside the logo, ahead of the outbound buttons.
+	   They bottom-align with the logo so the group reads as one row rather
+	   than floating in the middle of the header. */
+	.nav-links {
+		align-self: flex-end;
+		display: flex;
+		gap: 2rem;
+		margin-inline: 2.5rem auto;
+
+		a {
+			border-bottom: 1px solid transparent;
+			color: var(--color-secondary);
+			font-size: 0.95rem;
+			letter-spacing: 0.14em;
+			padding-block: 0.3rem 0.1rem;
+			text-transform: uppercase;
+			transition:
+				color 150ms ease,
+				border-color 150ms ease;
+
+			&:hover {
+				color: var(--color-tertiary);
+			}
+
+			&[aria-current="page"] {
+				border-bottom-color: var(--color-tertiary);
+				color: var(--color-tertiary);
+			}
+
+			&:focus-visible {
+				outline: 2px solid var(--color-tertiary);
+				outline-offset: 3px;
+			}
+		}
+
+		@media (max-width: 900px) {
+			gap: 1.5rem;
+			margin-left: 1.75rem;
+		}
+	}
+
 	.external-links {
+		/* Keep the outbound icon buttons at their original compact height now
+		   that the header is taller; they centre on the logo. */
+		align-self: center;
 		display: flex;
 		gap: 0.5rem;
+		height: 2.5rem;
 		width: fit-content;
 	}
 

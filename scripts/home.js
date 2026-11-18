@@ -4,6 +4,6 @@ import { initialiseNavbar } from "./components/navbar.js";
 import { initialiseSkills } from "./components/skills.js";
 
 initialiseNavbar();
-initialiseMobileNav("home");
+initialiseMobileNav("home", { base: "" });
 initialiseSkills();
 initialiseFooter();
