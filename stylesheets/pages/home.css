@@ -98,6 +98,15 @@
 		grid-template-columns: 1fr 3fr;
 		position: relative;
 
+		/* Light mode needs a stronger tint for the mobile active-tab bubble to
+		   match the contrast it naturally gets against the darker panel in dark
+		   mode. Same pattern as --oklch-alpha-btn-shadow-inset. */
+		--mobile-bubble-tint: 62%;
+
+		@media (prefers-color-scheme: dark) {
+			--mobile-bubble-tint: 35%;
+		}
+
 		@media (max-width: 768px) {
 			display: flex;
 			column-gap: unset;
@@ -133,8 +142,8 @@
 				.mobile-bubble {
 					background-color: color-mix(
 						in oklch,
-						var(--color-tertiary),
-						transparent 65%
+						var(--color-tertiary) var(--mobile-bubble-tint),
+						transparent
 					);
 					display: block;
 					inset: 0 auto auto 0;

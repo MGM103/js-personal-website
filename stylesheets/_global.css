@@ -40,4 +40,11 @@
 
 main {
 	padding-top: var(--header-height);
+
+	/* Mobile has no fixed navbar, so the content can start closer to the top.
+	   The bottom padding keeps the footer clear of the floating menu button. */
+	@media (max-width: 768px) {
+		padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+		padding-top: 1.5rem;
+	}
 }

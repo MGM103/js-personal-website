@@ -110,4 +110,9 @@ body > header {
 		gap: 0.5rem;
 		width: fit-content;
 	}
+
+	/* Mobile navigation lives in a floating button and dialog instead. */
+	@media (max-width: 768px) {
+		display: none;
+	}
 }
