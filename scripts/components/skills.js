@@ -149,7 +149,7 @@ function onSkillClick(event) {
 /**********************************************************************
  * Initialiser
  **********************************************************************/
-export function initaliseSkills() {
+export function initialiseSkills() {
 	skillsSidePanel.addEventListener("click", onCategoryClick);
 	skillsContainer.addEventListener("click", onSkillClick);
 

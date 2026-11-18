@@ -4,14 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="stylesheets/_global.css" />
+    <link rel="stylesheet" href="stylesheets/pages/home.css" />
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
-    <script type="module" src="scripts/main.js"></script>
+    <script type="module" src="scripts/home.js"></script>
     <title>Marcus Marinelli</title>
   </head>
   <body>
     <!-- Component: navbar -->
     <header>
-      <span class="logo">MARA</span>
+      <a
+        href="index.html"
+        class="logo"
+        title="Marcus Marinelli — home"
+        aria-label="Marcus Marinelli — home"
+        >M<sup>2</sup></a
+      >
 
       <div class="external-links">
         <a
@@ -75,12 +82,7 @@
           </svg>
         </a>
 
-        <a
-          href="https://drive.google.com/file/d/1vYVl63QeDYEr6ttxXMOEYOM5W7uEQEvG/view?usp=sharing"
-          target="_blank"
-          title="Résumé"
-          class="outline-btn"
-        >
+        <a href="pages/cv.html" title="CV" class="outline-btn">
           <svg
             width="800px"
             height="800px"
@@ -208,7 +210,10 @@
         </div>
       </div>
 
-      <footer>&copy; 2026 Marcus Marinelli</footer>
+      <footer>
+        <span class="copyright">&copy; 2026 Marcus Marinelli</span>
+        <a href="mailto:marcus.marinelli3@gmail.com">Contact me</a>
+      </footer>
     </main>
   </body>
 </html>

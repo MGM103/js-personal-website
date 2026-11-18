@@ -1,7 +1,10 @@
-@layer reset, base, components, utilities;
+/* Shared styles. Page-specific CSS lives in stylesheets/pages/ and is linked
+   by each page. */
+@layer reset, base, components, pages, utilities;
 
 @import url("./reset.css") layer(reset);
 @import url("./base.css") layer(base);
+@import url("./typography.css") layer(base);
 @import url("./components.css") layer(components);
 @import url("./animations.css") layer(utilities);
 @import url("./utilities.css") layer(utilities);

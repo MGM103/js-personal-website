@@ -1,4 +1,5 @@
-header {
+/* Only the site navbar. Articles on the CV use their own headers. */
+body > header {
 	background-color: var(--color-primary);
 	display: flex;
 	justify-content: space-between;
@@ -79,7 +80,29 @@ header {
 	}
 
 	.logo {
-		font-size: 2rem;
+		color: var(--color-secondary);
+		font-size: 2.5rem;
+		transition: filter 200ms ease;
+
+		&:hover,
+		&:focus-visible {
+			filter: drop-shadow(
+				0 0 8px
+					color-mix(
+						in oklch,
+						var(--color-secondary),
+						var(--color-tertiary) 80%
+					)
+			);
+		}
+
+		sup {
+			font-size: 0.5em;
+			line-height: 0;
+			margin-left: 0.05em;
+			position: relative;
+			top: -0.55em;
+		}
 	}
 
 	.external-links {

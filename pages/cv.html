@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Marcus Marinelli's CV — software engineer specialising in full-stack web development."
+    />
+    <link rel="stylesheet" href="../stylesheets/_global.css" />
+    <link rel="stylesheet" href="../stylesheets/pages/cv.css" />
+    <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+    <script type="module" src="../scripts/cv.js"></script>
+    <title>CV — Marcus Marinelli</title>
+  </head>
+  <body>
+    <!-- Component: navbar -->
+    <header>
+      <a
+        href="../index.html"
+        class="logo"
+        title="Marcus Marinelli — home"
+        aria-label="Marcus Marinelli — home"
+        >M<sup>2</sup></a
+      >
+
+      <div class="external-links">
+        <a
+          href="https://github.com/MGM103"
+          target="_blank"
+          rel="noopener"
+          title="GitHub"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 192 192"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="12"
+              d="M120.755 170c.03-4.669.059-20.874.059-27.29 0-9.272-3.167-15.339-6.719-18.41 22.051-2.464 45.201-10.863 45.201-49.067 0-10.855-3.824-19.735-10.175-26.683 1.017-2.516 4.413-12.63-.987-26.32 0 0-8.296-2.672-27.202 10.204-7.912-2.213-16.371-3.308-24.784-3.352-8.414.044-16.872 1.14-24.785 3.352C52.457 19.558 44.162 22.23 44.162 22.23c-5.4 13.69-2.004 23.804-.987 26.32C36.824 55.498 33 64.378 33 75.233c0 38.204 23.149 46.603 45.2 49.067-3.551 3.071-6.719 9.138-6.719 18.41 0 6.416.03 22.621.059 27.29M27 130c9.939.703 15.67 9.735 15.67 9.735 8.834 15.199 23.178 10.803 28.815 8.265"
+            ></path>
+          </svg>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/marcus-marinelli-b1a10b1a0/"
+          target="_blank"
+          rel="noopener"
+          title="LinkedIn"
+          class="outline-btn"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 20 20"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-180.000000, -7479.000000)"
+                fill="#000000"
+              >
+                <g id="icons" transform="translate(56.000000, 160.000000)">
+                  <path
+                    d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z"
+                    id="linkedin-[#161]"
+                    fill="currentColor"
+                  ></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </a>
+
+        <a href="../index.html" title="Home" class="outline-btn">
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M3 10.5 12 3l9 7.5" />
+            <path d="M5 9.5V21h14V9.5" />
+            <path d="M10 21v-6h4v6" />
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="cv">
+        <!-- Component: CV intro -->
+        <section class="cv-intro">
+          <a class="cv-back-link" href="../index.html"
+            >&larr; Back to home</a
+          >
+
+          <img
+            src="../assets/images/cv_cropped_photo.jpg"
+            alt="Marcus Marinelli"
+            width="2892"
+            height="3113"
+          />
+
+          <div class="cv-intro-body">
+            <h1>Marcus Marinelli</h1>
+            <p class="cv-role">Software Engineer</p>
+
+            <p class="cv-email">
+              <a href="mailto:marcus.marinelli3@gmail.com"
+                >marcus.marinelli3@gmail.com</a
+              >
+            </p>
+
+            <!-- Print-only contact details; the visible page shows the email
+                 above and the footer link instead. -->
+            <ul class="print-contact">
+              <li>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3 7 9 6 9-6" />
+                </svg>
+                <a href="mailto:marcus.marinelli3@gmail.com"
+                  >marcus.marinelli3@gmail.com</a
+                >
+              </li>
+              <li>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"
+                  />
+                </svg>
+                <a href="tel:+61400134226">+61 400 134 226</a>
+              </li>
+            </ul>
+            <div class="cv-actions">
+              <a
+                class="outline-btn"
+                href="../assets/documents/marcus-marinelli-cv.pdf"
+                download="marcus-marinelli-cv.pdf"
+                type="application/pdf"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M12 3v12" />
+                  <path d="m7 10 5 5 5-5" />
+                  <path d="M5 21h14" />
+                </svg>
+                Download PDF
+              </a>
+
+              <button class="outline-btn" id="cv-print" type="button">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M6 9V3h12v6" />
+                  <path d="M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2" />
+                  <rect x="6" y="14" width="12" height="7" rx="1" />
+                </svg>
+                Print
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Component: work experience -->
+        <section class="cv-section" aria-labelledby="cv-experience">
+          <h2 id="cv-experience">Work Experience</h2>
+
+          <article class="cv-entry">
+            <header>
+              <h3>Software Engineer</h3>
+              <p class="cv-meta">Vitrafy</p>
+              <p class="cv-dates">
+                <time datetime="2025-03">Mar 2025</time> &ndash; Present
+              </p>
+            </header>
+
+            <ul>
+              <li>
+                Develop responsive, enterprise-grade UI using Next.js and Chakra
+                UI, leveraging Zod and TanStack for state management and
+                validation.
+              </li>
+              <li>
+                Design and implement backend services using Node.js and Express,
+                building the core functionality of the application.
+              </li>
+              <li>
+                Act as the team SME for Temporal, the software we use for
+                orchestration of distributed backend workflows.
+              </li>
+              <li>
+                Contribute to system architecture decisions, lead architectural
+                discussions and seminars, and review and approve pull requests
+                from junior engineers.
+              </li>
+              <li>
+                Facilitate agile ceremonies including daily stand-ups and sprint
+                planning, collaborating closely with the tech lead to refine
+                stories and plan deliverables.
+              </li>
+            </ul>
+          </article>
+
+          <article class="cv-entry">
+            <header>
+              <h3>Software Engineer</h3>
+              <p class="cv-meta">EY</p>
+              <p class="cv-dates">
+                <time datetime="2022-02">Feb 2022</time> &ndash;
+                <time datetime="2024-09">Sep 2024</time>
+              </p>
+            </header>
+
+            <div class="cv-entry-body">
+              <div class="engagement">
+                <h4>Health insurer portals</h4>
+                <p>
+                  Full-stack developer for a major Australian health insurer.
+                  Our team built the customer and consultant portals used today
+                  by over 250,000 members. I built new features end-to-end,
+                  including performant APIs in Go and reusable, modular Vue
+                  components. Stack: Vue.js, Node.js, Go and Azure cloud.
+                </p>
+              </div>
+
+              <div class="engagement">
+                <h4>Payments platform</h4>
+                <p>
+                  Full-stack developer for an international insurance company,
+                  building new features for online payment services used by over
+                  100,000 customers to pay their insurance premiums. I created
+                  composable React components that powered the front-end for the
+                  insurer's different brands, and extended the features of the
+                  payment backend. Stack: React, Node.js and Java.
+                </p>
+              </div>
+
+              <div class="engagement">
+                <h4>Data migration</h4>
+                <p>
+                  Part of a data migration project for a large multinational
+                  insurance company. Extracted data from multiple legacy systems
+                  and migrated it to a new big data solution critical for the
+                  company's future advertising campaigns. Stack: PostgreSQL,
+                  Python, Bash and Jenkins.
+                </p>
+              </div>
+
+              <div class="engagement">
+                <h4>DevSecOps tooling</h4>
+                <p>
+                  Key contributor to a DevSecOps tool built as an internal
+                  initiative at EY. The tool automated testing and deployment of
+                  smart contracts, ensuring contracts were only deployed after
+                  successful unit tests, fuzzing tests (Echidna) and simulated
+                  attacks via Mythril.
+                </p>
+              </div>
+
+              <div class="engagement">
+                <h4>Developer enablement</h4>
+                <p>
+                  Produced a micro-frontend tutorial used to onboard new joiners
+                  to a large project within Digital Engineering. The tutorial
+                  covers MFEs, React.js and Docker.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="cv-entry">
+            <header>
+              <h3>Tech Consultant Intern</h3>
+              <p class="cv-meta">EY</p>
+              <p class="cv-dates">
+                <time datetime="2020-01">Jan 2020</time> &ndash;
+                <time datetime="2020-07">Jul 2020</time>
+              </p>
+            </header>
+
+            <div class="cv-entry-body">
+              <p>
+                Throughout the course of my internship, I was part of a project
+                at a global health insurer aimed at re-engineering current
+                practices, by both digitizing and streamlining the existing
+                claims processes.
+              </p>
+
+              <ul>
+                <li>
+                  I utilised Python (numpy, pandas &amp; pychart) to analyse and
+                  visualise in-house claims data.
+                </li>
+                <li>
+                  I developed a work allocation tool using Python, Power Query
+                  and VBA. The tool is in use today and is relied upon to ensure
+                  high-priority work is always allocated with a buffer,
+                  preventing fines or penalties incurred for missing critical
+                  deadlines, an issue that the client was struggling with.
+                </li>
+                <li>
+                  I conducted user acceptance testing with the client to ensure
+                  the tool being developed fulfilled the business requirements
+                  and had a satisfactory user experience.
+                </li>
+              </ul>
+            </div>
+          </article>
+        </section>
+
+        <!-- Component: education -->
+        <section class="cv-section" aria-labelledby="cv-education">
+          <h2 id="cv-education">Education</h2>
+
+          <article class="cv-entry">
+            <header>
+              <h3>Bachelor of Software Engineering (Honours)</h3>
+              <p class="cv-meta">Monash University</p>
+              <p class="cv-dates">Class of 2021</p>
+            </header>
+
+            <ul>
+              <li>3.5 GPA &amp; 80 WAM</li>
+              <li>
+                2020 semester 1 DUX of the Industry Based Learning internship
+                unit
+              </li>
+              <li>Faculty of Engineering Dean's honour list 2019 &amp; 2020</li>
+              <li>
+                Final year ML research project titled
+                <a
+                  href="https://doi.org/10.5220/0010576503860397"
+                  target="_blank"
+                  rel="noopener"
+                  >"AH-CID: A Tool to Automatically Detect Human-Centric Issues
+                  in App Reviews"</a
+                >
+                was published in the proceedings of the 16th International
+                Conference on Software Technologies
+              </li>
+            </ul>
+          </article>
+        </section>
+
+        <!-- Component: skills -->
+        <section class="cv-section" aria-labelledby="cv-skills">
+          <h2 id="cv-skills">Software Development Skills</h2>
+
+          <dl class="cv-skills">
+            <div class="skill-group">
+              <dt>Programming Languages</dt>
+              <dd>
+                JavaScript, TypeScript, Java, Go, CSS, HTML, Node.js, Python,
+                Solidity, C, C# &amp; Rust
+              </dd>
+            </div>
+
+            <div class="skill-group">
+              <dt>Frontend Frameworks</dt>
+              <dd>React.js, Vue.js, SvelteKit, Angular &amp; Next.js</dd>
+            </div>
+
+            <div class="skill-group">
+              <dt>Cloud &amp; DevOps</dt>
+              <dd>
+                Azure Cloud, Docker, Linux, GitHub Actions, Jenkins, Kubernetes,
+                Bash &amp; Nginx
+              </dd>
+            </div>
+
+            <div class="skill-group">
+              <dt>Blockchain Development</dt>
+              <dd>Foundry, Hardhat, Slither, Echidna, Aderyn &amp; Mythril</dd>
+            </div>
+
+            <div class="skill-group">
+              <dt>Data</dt>
+              <dd>PostgreSQL, SQL, SQLite, MongoDB &amp; PySpark</dd>
+            </div>
+          </dl>
+        </section>
+
+        <!-- Component: extracurricular -->
+        <section class="cv-section" aria-labelledby="cv-extracurricular">
+          <h2 id="cv-extracurricular">Extracurricular</h2>
+
+          <ul class="cv-list">
+            <li>
+              I have been participating in competitive security review/code audit
+              contests and recently finished joint 5th in the
+              <a
+                href="https://codehawks.cyfrin.io/c/2024-09-mystery-box/results?lt=contest&amp;sc=reward&amp;sj=reward&amp;page=1&amp;t=leaderboard"
+                target="_blank"
+                rel="noopener"
+                >CodeHawks first flight mystery box challenge</a
+              >. My username in this contest was 0xNelli.
+            </li>
+            <li>
+              I have a technical blog in which I reflect on the learnings of
+              developing new side-projects and the outcomes of code audit
+              contests. The articles I have written can be found
+              <a
+                href="https://mirror.xyz/0x194541D1009d22f7aE586c3AAeF4273B5aA79596"
+                target="_blank"
+                rel="noopener"
+                >here</a
+              >.
+            </li>
+            <li>
+              I enjoy learning new programming languages and building new
+              projects, which can be seen in my
+              <a href="https://github.com/MGM103" target="_blank" rel="noopener"
+                >GitHub</a
+              >. In my latest project, I built an app using SvelteKit and SQLite
+              and hosted it on a VPS, to better learn about these technologies and
+              self-hosted deployment.
+            </li>
+            <li>
+              I am upskilling my blockchain development and security skills by
+              completing courses on
+              <a
+                href="https://updraft.cyfrin.io/dashboard"
+                target="_blank"
+                rel="noopener"
+                >Cyfrin Updraft</a
+              >; this has aided me in blockchain auditing competitions I have
+              participated in thus far.
+            </li>
+            <li>
+              Whilst at EY I was the Melbourne team lead for the social &amp;
+              cultural team and ran various types of events in this capacity.
+            </li>
+          </ul>
+        </section>
+
+        <footer>
+          <span class="copyright">&copy; 2026 Marcus Marinelli</span>
+          <a href="mailto:marcus.marinelli3@gmail.com">Contact me</a>
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>

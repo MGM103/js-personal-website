@@ -2,6 +2,8 @@
  * Initialiser
  **********************************************************************/
 export function initialiseFooter() {
-	const footer = document.querySelector("footer");
-	footer.textContent = `© ${new Date().getFullYear()} Marcus Marinelli`;
+	const copyright = document.querySelector("footer .copyright");
+	if (!copyright) return;
+
+	copyright.textContent = `© ${new Date().getFullYear()} Marcus Marinelli`;
 }

@@ -1,0 +1,245 @@
+@layer pages {
+	#about {
+		align-items: start;
+		display: grid;
+		gap: 2rem;
+		grid-template-columns: clamp(180px, 25vw, 280px) 1fr;
+
+		#bio {
+			display: flex;
+			flex-direction: column;
+
+			p {
+				margin-top: 0;
+			}
+		}
+
+		img {
+			height: auto;
+			width: 100%;
+			display: block;
+		}
+
+		@media (max-width: 1024px) {
+			grid-template-columns: 1fr;
+			img {
+				display: none;
+			}
+		}
+	}
+
+	:root {
+		--hero-title-size: 72px;
+	}
+
+	#hero {
+		border-bottom: 1px solid var(--color-secondary);
+		display: flex;
+		flex-direction: column;
+		height: 90vh;
+
+		h1 {
+			font-size: var(--hero-title-size);
+			line-height: 1.2;
+			text-transform: capitalize;
+			margin-bottom: -1rem;
+
+			@media (max-width: 768px) {
+				margin-bottom: unset;
+			}
+		}
+
+		h2 {
+			color: var(--color-tertiary);
+			font-size: calc(var(--hero-title-size) * 0.8);
+			line-height: 1.5;
+			margin-bottom: -1rem;
+			text-transform: capitalize;
+
+			@media (max-width: 768px) {
+				/* Matches the h1's leading so both headings read as one block. */
+				line-height: 1.2;
+			}
+		}
+
+		#preview {
+			align-items: flex-end;
+			align-self: flex-end;
+			display: flex;
+			justify-content: flex-end;
+			margin-bottom: 2rem;
+			margin-top: auto;
+			width: 75%;
+
+			svg {
+				color: var(--color-secondary);
+				max-height: 64px;
+				flex: 1;
+
+				@media (max-width: 768px) {
+					flex: unset;
+				}
+			}
+
+			p {
+				flex: 9;
+				margin: 0;
+			}
+
+			@media (max-width: 1024px) {
+				width: 100%;
+			}
+		}
+	}
+
+	#skills {
+		column-gap: 4rem;
+		display: grid;
+		grid-template-columns: 1fr 3fr;
+		position: relative;
+
+		@media (max-width: 768px) {
+			display: flex;
+			column-gap: unset;
+			gap: 1.5rem;
+			flex-direction: column-reverse;
+		}
+
+		.side-panel {
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+
+			.mobile-bubble {
+				display: none;
+			}
+
+			@media (max-width: 768px) {
+				background-color: color-mix(
+					in oklch,
+					var(--color-primary),
+					var(--color-secondary) 25%
+				);
+				border: 1px solid var(--color-secondary);
+				flex-direction: row;
+				gap: 0.25rem;
+				justify-content: initial;
+				padding: 0.25rem;
+
+				/* Containing block + stacking context for the bubble. */
+				isolation: isolate;
+				position: relative;
+
+				.mobile-bubble {
+					background-color: color-mix(
+						in oklch,
+						var(--color-tertiary),
+						transparent 65%
+					);
+					display: block;
+					inset: 0 auto auto 0;
+					pointer-events: none;
+					position: absolute;
+					transition:
+						transform 250ms ease,
+						width 250ms ease,
+						height 250ms ease;
+					z-index: -1;
+
+					/* Avoids animating the entry glide on first placement. */
+					&.mobile-bubble--instant {
+						transition: none;
+					}
+				}
+			}
+		}
+
+		.skills-container {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(auto, 128px));
+			row-gap: 2rem;
+
+			@media (max-width: 768px) {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+
+		#skill-modal {
+			background-color: var(--color-primary);
+			color: inherit;
+
+			&::backdrop {
+				background: color-mix(in srgb, var(--color-primary), transparent 15%);
+			}
+		}
+
+		#skill-modal-container {
+			display: flex;
+			gap: 1.5rem;
+
+			#skill-icon {
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding-block: 3rem;
+
+				svg {
+					animation: hovering 5s ease-in-out infinite;
+				}
+
+				#icon-reflection {
+					position: absolute;
+					bottom: 1rem;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 85%;
+					height: 16px;
+					background: radial-gradient(
+						ellipse at center,
+						color-mix(in srgb, var(--color-secondary), transparent 35%) 0%,
+						transparent 78%
+					);
+				}
+
+				@media (max-width: 768px) {
+					display: none;
+				}
+			}
+		}
+
+		#skill-close {
+			position: absolute;
+			top: 2%;
+			right: 1%;
+			z-index: 1;
+
+			.close-label {
+				display: none;
+			}
+
+			/* Mobile: the icon becomes a labelled button at the bottom of the dialog. */
+			@media (max-width: 768px) {
+				border: 1px solid var(--color-tertiary);
+				line-height: normal;
+				margin-top: 1.5rem;
+				padding-block: 0.5rem;
+				position: static;
+				width: 100%;
+
+				.close-icon {
+					display: none;
+				}
+
+				.close-label {
+					display: inline;
+				}
+
+				/* The glow below only targets the icon, which is hidden here. */
+				&:focus-visible {
+					outline: 2px solid var(--color-tertiary);
+				}
+			}
+		}
+	}
+}
